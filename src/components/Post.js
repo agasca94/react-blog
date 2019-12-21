@@ -1,10 +1,44 @@
 import React from 'react';
-import { useParams } from 'react-router-dom'
+import ReactMarkdown from 'markdown-to-jsx';
+import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
+import { Link as ReactLink } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 
-function Post() {
-    const { post_id } = useParams()
+const useStyles = makeStyles(theme => ({
+    markdown: {
+        ...theme.typography.body2,
+    },
+    post: {
+        padding: theme.spacing(3, 0)
+    }
+}))
+
+const options = {
+    overrides: {
+        h2: { component: Typography, props: { gutterBottom: true, variant: 'h6' } },
+        h3: { component: Typography, props: { gutterBottom: true, variant: 'subtitle1' } },
+        p: { component: Typography, props: { paragraph: true } },
+        a: { component: Link }
+    }
+}
+
+function Post(props) {
+    const { post } = props;
+    const classes = useStyles();
+
     return (
-        <p>Post page {post_id}</p>
+        <div className={classes.post}>
+            <Typography gutterBottom={true} variant='h5'>
+                {post.title}
+            </Typography>
+            <Typography gutterBottom={true} variant='caption' paragraph={true}>
+                {post.created_at} by <Link component={ReactLink} to='#'>{post.author.name}</Link>
+            </Typography>
+            <ReactMarkdown className={classes.markdown} options={options}>
+                {post.contents}
+            </ReactMarkdown>
+        </div>
     )
 }
 
