@@ -11,7 +11,7 @@ const posts = [
         id: 1,
         title: 'A new post',
         created_at: 'April 1, 2020',
-        author: {name: 'Arturo'},
+        author: {name: 'Arturo', username: 'agasca'},
         contents: `
 Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum.
 Aenean lacinia bibendum nulla sed consectetur.
@@ -30,7 +30,7 @@ Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus
         id: 2,
         title: 'A new post',
         created_at: 'April 1, 2020',
-        author: {name: 'Arturo'},
+        author: {name: 'Arturo', username: 'agasca'},
         contents: `
 Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum.
 Aenean lacinia bibendum nulla sed consectetur.
@@ -49,7 +49,7 @@ Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus
         id: 3,
         title: 'A new post',
         created_at: 'April 1, 2020',
-        author: {name: 'Arturo'},
+        author: {name: 'Arturo', username: 'agasca'},
         contents: `
 Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum.
 Aenean lacinia bibendum nulla sed consectetur.
@@ -92,15 +92,20 @@ function Blog() {
                 <Header title='YABA'/>
                 <main>
                     <Grid container spacing={5} className={classes.mainGrid}>
-                        <BlogMainContent
-                            posts={posts}
-                            title='Recently published'
-                        />
-                        <Sidebar
-                            title={sidebar.title}
-                            description={sidebar.description}
-                            archives={sidebar.archives}
-                        />
+                        <Grid item xs={12} md={8}>
+                            <BlogMainContent
+                                posts={posts}
+                                title='Recently published'
+                            />
+                        </Grid>
+                        
+                        <Grid item xs={12} md={4}>
+                            <Sidebar
+                                title={sidebar.title}
+                                description={sidebar.description}
+                                archives={sidebar.archives}
+                            />
+                        </Grid>
                     </Grid>
                 </main>
             </Container>

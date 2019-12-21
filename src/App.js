@@ -4,17 +4,21 @@ import {
     Route,
     Switch
 } from 'react-router-dom';
-import Home from './components/Home';
+import Auth from './components/Auth';
 import Blog from './components/Blog';
+import Settings from './components/Settings';
 import Me from './components/Me';
+import Editor from './components/Editor';
 
 function App() {
     return (
         <Router>
             <Switch>
-                <Route path='/posts' component={Blog}></Route>
-                <Route path='/me' component={Me}></Route>
-                <Route path='/' component={Home}></Route>
+                <Route path='/blog' component={Blog}></Route>
+                <Route path='/@:username' component={Me}></Route>
+                <Route path='/settings' component={Settings}></Route>
+                <Route path='/editor' component={Editor}></Route>
+                <Route path='/' component={Auth}></Route>
             </Switch>
         </Router>
     );

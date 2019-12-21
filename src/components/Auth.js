@@ -23,7 +23,7 @@ const useStyles = makeStyles(_ => ({
     },
 }));
 
-function Home() {
+function Auth() {
     const classes = useStyles();
     const location = useLocation();
     return (
@@ -41,4 +41,4 @@ function Home() {
     )
 }
 
-export default Home;
+export default Auth;
