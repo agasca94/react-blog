@@ -1,6 +1,5 @@
 import React from 'react';
-import Container from '@material-ui/core/Container'
-import Header from './Header';
+import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Box, TextField, Button } from '@material-ui/core';
 
@@ -18,15 +17,11 @@ function Settings() {
 
     return (
         <React.Fragment>
-            <Container maxWidth='lg'>
-                <Header title='YABA'/>
-            </Container>
-
-            <Box maxWidth='lg' className={classes.settings}>
+            <Container maxWidth='sm' className={classes.settings}>
                 <Typography variant='h4'>
                     Your Settings
                 </Typography>
-                <form>
+                <form style={{width: '100%'}}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -60,7 +55,7 @@ function Settings() {
                         </Button>
                     </Box>
                 </form>
-            </Box>
+            </Container>
         </React.Fragment>
     );
 }

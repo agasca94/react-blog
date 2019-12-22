@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from './Header';
 import Sidebar from './Sidebar';
 import { CssBaseline, Container } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -89,7 +88,6 @@ function Blog() {
         <React.Fragment>
             <CssBaseline/>
             <Container maxWidth='lg'>
-                <Header title='YABA'/>
                 <main>
                     <Grid container spacing={5} className={classes.mainGrid}>
                         <Grid item xs={12} md={8}>

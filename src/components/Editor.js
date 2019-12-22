@@ -1,13 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Box, TextField, Button, Container } from '@material-ui/core';
-import Header from './Header'
-
 
 const useStyles = makeStyles(theme => ({
     editor: {
         display: 'flex',
         flexDirection: 'column',
+        alignItems: 'center',
         marginTop: theme.spacing(1)
     }
 }))
@@ -17,15 +16,11 @@ function NewArticle() {
 
     return (
         <React.Fragment>
-            <Container maxWidth='lg'>
-                <Header title='YABA'/>
-            </Container>
-
             <Container maxWidth='md' className={classes.editor}>
                 <Typography variant='h4' align='center'>
                     Post Title
                 </Typography>
-                <form>
+                <form style={{width: '100%'}}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -45,7 +40,7 @@ function NewArticle() {
                         name="contents"
                         required
                         multiline
-                        rows='20'
+                        rows='30'
                     />
                     <Box display='flex' justifyContent='flex-end'>
                         <Button variant="contained" color="primary" disableElevation size='large'>

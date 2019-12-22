@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Header from './Header';
 import BlogMainContent from './BlogMainContent';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Box, Avatar, Typography, Container, Button } from '@material-ui/core';
@@ -39,9 +38,6 @@ function Me() {
     return (
         <React.Fragment>
             <CssBaseline/>
-            <Container maxWidth='lg'>
-                <Header title='YABA'/>
-            </Container>
             <Box
                 bgcolor='primary.main'
             >
