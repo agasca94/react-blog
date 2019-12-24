@@ -8,8 +8,7 @@ import {
     Switch,
     useLocation
 } from 'react-router-dom';
-import Login from './Login';
-import Register from './Register';
+import AuthLayout from './AuthLayout';
 
 const useStyles = makeStyles(_ => ({
     root: {
@@ -32,9 +31,17 @@ function Auth() {
             <Grid item xs={false} sm={4} md={7} className={classes.image}/>
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                 <Switch location={location}>
-                    <Route path='/login' component={Login}></Route>
-                    <Route path='/register' component={Register}></Route>
-                    <Route path='/' component={Login}></Route>
+                    <Route path='/login'>
+                        <AuthLayout type='login'/>
+                    </Route>
+
+                    <Route path='/register'>
+                        <AuthLayout type='register'/>
+                    </Route>
+
+                    <Route path='/'>
+                        <AuthLayout type='login'/>
+                    </Route>
                 </Switch>
             </Grid>
         </Grid>

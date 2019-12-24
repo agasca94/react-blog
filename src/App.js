@@ -11,19 +11,21 @@ import Settings from './components/Settings';
 import Me from './components/Me';
 import Editor from './components/Editor';
 import { Container } from '@material-ui/core';
+import { connect } from 'react-redux';
 
 function renderToolbar(path) {
     const AUTH_ROUTES = ['/', '/register', '/login'];
     return !AUTH_ROUTES.includes(path)
 }
 
-function App() {
+function App(props) {
     const { pathname } = useLocation();
+    console.log(props)
     return (
         <div>
             {renderToolbar(pathname) && 
                 <Container maxWidth='lg'>
-                    <Header title='YABA' currentUser={{username: 'agasca'}}/>
+                    <Header title='YABA' currentUser={props.user}/>
                 </Container>
             }
             <Switch>
@@ -37,4 +39,8 @@ function App() {
     );
 }
 
-export default App;
+const mapStateToProps = state => ({
+    user: state.auth.user
+})
+
+export default connect(mapStateToProps)(App);
