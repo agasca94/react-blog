@@ -33,6 +33,8 @@ function RegisterForm(props) {
                 name="name"
                 autoFocus
                 value={name}
+                error={props.errors?.hasOwnProperty('name')}
+                helperText={props.errors?.name}
                 onChange={handleChange(setName)}
             />
             <TextField
@@ -45,6 +47,8 @@ function RegisterForm(props) {
                 name="username"
                 autoFocus
                 value={username}
+                error={props.errors?.hasOwnProperty('username')}
+                helperText={props.errors?.username}
                 onChange={handleChange(setUsername)}
             />
             <TextField
@@ -57,6 +61,8 @@ function RegisterForm(props) {
                 name="email"
                 autoComplete="email"
                 value={email}
+                error={props.errors?.hasOwnProperty('email')}
+                helperText={props.errors?.email}
                 onChange={handleChange(setEmail)}
             />
             <TextField
@@ -70,6 +76,8 @@ function RegisterForm(props) {
                 type="password"
                 autoComplete="current-password"
                 value={password}
+                error={props.errors?.hasOwnProperty('password')}
+                helperText={props.errors?.password}
                 onChange={handleChange(setPassword)}
             />
             <Button

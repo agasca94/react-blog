@@ -20,7 +20,6 @@ function renderToolbar(path) {
 
 function App(props) {
     const { pathname } = useLocation();
-    console.log(props)
     return (
         <div>
             {renderToolbar(pathname) && 

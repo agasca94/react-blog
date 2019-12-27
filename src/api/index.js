@@ -6,20 +6,8 @@ const instance =  axios.create({
 
 export default {
     login: (email, password) => 
-    //instance.post('login', { email, password })
-        Promise.resolve({
-            data: {
-                username: 'jethrotull',
-                token: 'a1a1'
-            }
-        }),
+        instance.post('login', { email, password }),
 
     register: (name, username, email, password) => 
-        //instance.post('register', { name, username, email, password })
-        Promise.resolve({
-            data: {
-                username, 
-                token: 'a1a1'
-            }
-        })
+        instance.post('register', { name, username, email, password })
 }

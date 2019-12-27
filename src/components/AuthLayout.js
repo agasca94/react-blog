@@ -1,18 +1,18 @@
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Link from '@material-ui/core/Link';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
+import { Link, Box, Avatar, Grid, Typography, Container, makeStyles } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import Copyright from './Copyright';
-import { Link as ReactLink } from 'react-router-dom'
-import { Container } from '@material-ui/core';
+import { Link as ReactLink, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import Copyright from './Copyright';
 import { login, register } from '../actions/auth';
-import { makeStyles } from '@material-ui/core/styles';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
+import WarningMessage from './WarningMessage';
+
+const types = {
+    LOGIN: 'login',
+    REGISTER: 'register'
+}
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -27,27 +27,39 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function registerLink() {
-    return (
-        <Link to='/register' component={ReactLink} variant="body2">
-            Don't have an account? Sign up
-        </Link>
-    );
-}
+const registerLink = () => (
+    <Link to='/login' component={ReactLink} variant="body2">
+        Already have an account? Sign in
+    </Link>
+);
 
-function loginLink() {
-    return (
-        <Link to='/login' component={ReactLink} variant="body2">
-            Already have an account? Sign in
-        </Link>
-    );
-}
+const loginLink = () => (
+    <Link to='/register' component={ReactLink} variant="body2">
+        Don't have an account? Sign up
+    </Link>
+);
+
+const loginForm = ({ login, error }) => 
+    <LoginForm onLogin={login} errors={error?.errors}/>;
+
+const registerForm = ({ register, error }) => 
+    <RegisterForm onRegister={register} errors={error?.errors}/>;
 
 function Login(props) {
     const classes = useStyles();
-    const { type } = props;
-    const form = type === 'login' ? <LoginForm onLogin={props.login}/> : <RegisterForm onRegister={props.register}/>;
-    const bottomLink = type === 'login' ? loginLink() : registerLink();
+    const { type, error, user } = props;
+
+    if (user) {
+        return <Redirect to={'/blog'}/>
+    }
+
+    const form = type === types.LOGIN ? 
+        loginForm(props) : 
+        registerForm(props);
+
+    const bottomLink = type === types.LOGIN ? 
+        loginLink() : 
+        registerLink();
 
     return(
         <Container className={classes.paper}>
@@ -55,7 +67,7 @@ function Login(props) {
                 <LockOutlinedIcon/>
             </Avatar>
             <Typography component="h1" variant="h5">
-                {type === 'login' ? 'Sign In' : 'Sign Up'}
+                {type === types.LOGIN ? 'Sign In' : 'Sign Up'}
             </Typography>
             {form}
             <Grid container>
@@ -63,6 +75,9 @@ function Login(props) {
                     {bottomLink}
                 </Grid>
             </Grid>
+            {error &&
+                <WarningMessage message={error.message}/>
+            }
             <Box mt={5}>
                 <Copyright/>
             </Box>
@@ -70,4 +85,12 @@ function Login(props) {
     );
 }
 
-export default connect(null, { login, register })(Login);
+const mapStateToProps = (state) => ({
+    error: state.auth.error,
+    user: state.auth.user
+})
+
+export default connect(
+    mapStateToProps, 
+    { login, register }
+)(Login);

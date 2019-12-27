@@ -32,6 +32,8 @@ function LoginForm(props) {
                 autoComplete="email"
                 autoFocus
                 value={email}
+                error={props.errors?.hasOwnProperty('email')}
+                helperText={props.errors?.email}
                 onChange={handleChange(setEmail)}
             />
             <TextField
@@ -45,6 +47,8 @@ function LoginForm(props) {
                 type="password"
                 autoComplete="current-password"
                 value={password}
+                error={props.errors?.hasOwnProperty('password')}
+                helperText={props.errors?.password}
                 onChange={handleChange(setPassword)}
             />
             <Button
@@ -54,7 +58,7 @@ function LoginForm(props) {
                 className={classes.submit}
                 onClick={() => props.onLogin(email, password)}
             >
-                    Sign In
+                Sign In
             </Button>
         </form>
     );
