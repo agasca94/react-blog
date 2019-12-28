@@ -27,12 +27,12 @@ function LoggedOutActions(){
         <Box>
             <Button 
                 className={classes.actionButton} 
-                to='/register' 
+                to='/login' 
                 component={Link} 
                 variant='outlined' 
                 size='small'
             >
-                    Sign Up
+                Sign In
             </Button>
         </Box>
     );

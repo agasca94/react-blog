@@ -31,6 +31,7 @@ function App(props) {
                 <Route path='/blog' component={Blog}></Route>
                 <Route path='/@:username' component={Me}></Route>
                 <Route path='/settings' component={Settings}></Route>
+                <Route path='/editor/:postId' component={Editor}></Route>
                 <Route path='/editor' component={Editor}></Route>
                 <Route path='/' component={Auth}></Route>
             </Switch>

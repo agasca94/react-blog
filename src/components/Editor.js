@@ -1,6 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Box, TextField, Button, Container } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
+import { Typography, Container } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { fetchPost, createPost, updatePost } from '../actions/posts';
+import PostForm from './PostForm';
 
 const useStyles = makeStyles(theme => ({
     editor: {
@@ -11,46 +15,36 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function NewArticle() {
+const Editor = (props) => {
     const classes = useStyles();
+    const { postId } = useParams();
+    const { fetchPost, createPost, updatePost, post } = props;
+    const onSave = post => 
+        postId ? 
+            updatePost(postId, post) : 
+            createPost(post)
+
+    React.useEffect(() => {
+        if (postId) fetchPost(postId)
+    }, [postId, fetchPost]);
 
     return (
         <React.Fragment>
             <Container maxWidth='md' className={classes.editor}>
                 <Typography variant='h4' align='center'>
-                    Post Title
+                    {postId ? 'Edit post' : 'New post'}
                 </Typography>
-                <form style={{width: '100%'}}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="title"
-                        label="Title"
-                        name="title"
-                        required
-                        autoFocus
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="contents"
-                        label="Content"
-                        name="contents"
-                        required
-                        multiline
-                        rows='30'
-                    />
-                    <Box display='flex' justifyContent='flex-end'>
-                        <Button variant="contained" color="primary" disableElevation size='large'>
-                            Save
-                        </Button>
-                    </Box>
-                </form>
+                <PostForm onSave={onSave} post={post} />
             </Container>
         </React.Fragment>
     );
 }
 
-export default NewArticle;
+const mapStateToProps = (state) => ({
+    post: state.blog.post
+})
+
+export default connect(
+    mapStateToProps,
+    { fetchPost, createPost, updatePost })
+(Editor);

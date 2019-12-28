@@ -1,18 +1,26 @@
 import api from '../api'
 import * as types from './types';
 
-export const login = (email, password) => (dispatch) => {
+export const login = (email, password) => async (dispatch) => {
     dispatch(signInRequest());
-    return api.login(email, password)
-        .then(res => dispatch(signInSuccess(res.data)))
-        .catch(e => dispatch(signInError(e.response.data)))
+    try {
+        const res = await api.login(email, password);
+        return dispatch(signInSuccess(res.data));
+    }
+    catch (e) {
+        return dispatch(signInError(e.response.data));
+    }
 }
 
-export const register = (name, username, email, password) => (dispatch) => {
+export const register = (name, username, email, password) => async (dispatch) => {
     dispatch(signInRequest());
-    return api.register(name, username, email, password)
-        .then(res => dispatch(signInSuccess(res.data)))
-        .catch(e => dispatch(signInError(e.response.data)))
+    try {
+        const res = await api.register(name, username, email, password);
+        return dispatch(signInSuccess(res.data));
+    }
+    catch (e) {
+        return dispatch(signInError(e.response.data));
+    }
 }
 
 export const signInRequest = () => ({
