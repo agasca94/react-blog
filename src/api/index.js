@@ -1,28 +1,18 @@
-import axios from 'axios';
-
-const instance =  axios.create({
-    baseURL: 'http://localhost:5000/'
-})
+import { client } from './client';
 
 export default {
     login: (email, password) => 
-        instance.post('login', { email, password }),
+        client.post('login', { email, password }),
 
     register: (name, username, email, password) => 
-        instance.post('register', { name, username, email, password }),
+        client.post('register', { name, username, email, password }),
 
     fetchPost: (postId) => 
-        Promise.resolve({
-            data: {
-                title: 'A title',
-                contents: 'Something'
-            }
-        }),
-    //instance.get(`posts/${postId}`),
+        client.get(`posts/${postId}`),
 
     createPost: (post) => 
-        instance.post('posts', post),
+        client.post('posts', post),
 
     updatePost: (postId, post) => 
-        instance.put(`posts/${postId}`, post)
+        client.put(`posts/${postId}`, post),
 }

@@ -1,21 +1,18 @@
 import React from 'react';
 import { Box, TextField, Button } from '@material-ui/core';
-import { handleObjectChange } from './formUtils';
+import ResourceForm from './ResourceForm';
+
+const normalizaResource = (resource) => ({
+    title: resource?.title || '',
+    contents: resource?.contents || ''
+})
 
 function PostForm(props) {
-    const [post, setPost] = React.useState({
-        title: '',
-        contents: ''
-    })
-    
-    const handle = handleObjectChange(setPost);
-
-    React.useEffect(() => {
-        if (props.post) setPost({...props.post});
-    }, [props.post]);
+    const { post, onSave } = props;
+    const initialValues = normalizaResource(post);
 
     return (
-        <form style={{width: '100%'}}>
+        <ResourceForm style={{width: '100%'}} resource={initialValues} onSubmit={onSave}>
             <TextField
                 variant="outlined"
                 margin="normal"
@@ -24,8 +21,6 @@ function PostForm(props) {
                 label="Title"
                 required
                 autoFocus
-                value={post.title}
-                onChange={handle}
             />
             <TextField
                 variant="outlined"
@@ -36,15 +31,13 @@ function PostForm(props) {
                 required
                 multiline
                 rows='30'
-                value={post.contents}
-                onChange={handle}
             />
             <Box display='flex' justifyContent='flex-end'>
-                <Button variant="contained" color="primary" disableElevation size='large' onClick={() => props.onSave(post)}>
+                <Button variant="contained" color="primary" disableElevation size='large' type='submit'>
                     Save
                 </Button>
             </Box>
-        </form>
+        </ResourceForm>
     );
 }
 
