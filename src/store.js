@@ -8,19 +8,34 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const localStorageMiddleware = store => next => action => {
     if (action.type === types.SIGN_IN_SUCCESS) {
-        if (!action.error) {
-            window.localStorage.setItem('jwt', action.user.token);
-            setToken(action.user.token);
-        }
-    } /* else if (action.type === types.LOGOUT) {
-        window.localStorage.setItem('jwt', '');
-        agent.setToken(null);
-    } */
+        window.localStorage.setItem('jwt', action.user.token);
+        setToken(action.user.token);
+    } else if (action.type === types.SIGN_OUT) {
+        window.localStorage.removeItem('jwt');
+        setToken(null);
+    }
   
     next(action);
 };
-  
 
-export default createStore(rootReducer, composeEnhancers(
-    applyMiddleware(localStorageMiddleware, thunkMiddleware)
-));
+const loadToken = () => {
+    const token = window.localStorage.getItem('jwt');
+    if (token) {
+        setToken(token)
+    }
+    const preloadedState = {
+        auth: {
+            token
+        }
+    }
+
+    return preloadedState;
+}
+
+export default createStore(
+    rootReducer,
+    loadToken(),
+    composeEnhancers(
+        applyMiddleware(localStorageMiddleware, thunkMiddleware)
+    )
+);
