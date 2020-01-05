@@ -1,10 +1,20 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { Settings, ExitToApp } from '@material-ui/icons';
+import { 
+    Box, 
+    Avatar, 
+    Typography, 
+    Container, 
+    Button,
+    CircularProgress,
+    CssBaseline,
+    makeStyles
+} from '@material-ui/core';
+import { Link, useParams } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { signOut } from '../actions/auth';
+import { fetchUser } from '../actions/user';
 import BlogMainContent from './BlogMainContent';
-import SettingsIcon from '@material-ui/icons/Settings';
-import { Box, Avatar, Typography, Container, Button } from '@material-ui/core';
-import { Link as ReactLink } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     large: {
@@ -19,6 +29,11 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
         height: '30vh'
     },
+    bannerActions: {
+        display: 'flex',
+        marginTop: theme.spacing(2),
+        justifyContent: 'center',
+    },
     username: {
         color: theme.palette.common.white
     },
@@ -26,49 +41,87 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(2)
     },
     settingsButton: {
-        color: theme.palette.grey[400],
-        borderColor: theme.palette.grey[400],
-        marginTop: theme.spacing(2)
+        marginRight: theme.spacing(1),
+        color: theme.palette.grey[300],
+        borderColor: theme.palette.grey[300],
+    },
+    logoutButton: {
+        color: theme.palette.error.light,
+        borderColor: theme.palette.error.light,
+    },
+    loader: {
+        position: 'absolute',
+        left: '50%',
+        top: '40%'
     }
 }))
 
-function Me() {
+function Me(props) {
     const classes = useStyles();
+    const { username } = useParams();
+    const { signOut, currentUser, profileUser, fetchUser } = props;
+    const isCurrentUser = currentUser?.username === username;
+    const user = isCurrentUser ? currentUser : profileUser;
+
+    React.useEffect(
+        () => fetchUser(username), 
+        [fetchUser, username]
+    );
+
+    if (!user) {
+        return <CircularProgress size={80} className={classes.loader}/>
+    }
 
     return (
         <React.Fragment>
             <CssBaseline/>
-            <Box
-                bgcolor='primary.main'
-            >
+            <Box bgcolor='primary.main'>
                 <Container className={classes.banner} maxWidth='sm'>
                     <Avatar 
                         align='center'
                         className={classes.large} 
                         src='https://static.productionready.io/images/smiley-cyrus.jpg'/>
                     <Typography variant='h4' className={classes.username}>
-                        agasca
+                        {user.username}
                     </Typography>
-                    <Button
-                        to='/settings'
-                        component={ReactLink}
-                        size='small'
-                        variant='outlined'
-                        className={classes.settingsButton}
-                        startIcon={<SettingsIcon />}
-                    >
-                        Edit
-                    </Button>
+                    {isCurrentUser &&
+                        <Container className={classes.bannerActions}>
+                            <Button
+                                to='/settings'
+                                component={Link}
+                                size='small'
+                                variant='outlined'
+                                className={classes.settingsButton}
+                                startIcon={<Settings/>}
+                            >
+                                Edit
+                            </Button>
+                            <Button
+                                onClick={signOut}
+                                size='small'
+                                variant='outlined'
+                                className={classes.logoutButton}
+                                startIcon={<ExitToApp/>}
+                            >
+                                Logout
+                            </Button>
+                        </Container>
+                    }
                 </Container>
             </Box>
             <Container maxWidth='md' className={classes.posts}>
                 <Typography paragraph>
-                    A bit about me...
+                    {user.bio}
                 </Typography>
-                <BlogMainContent title='Mis publicaciones' posts={[]}></BlogMainContent>
+                <BlogMainContent title='My posts' posts={[]}/>
             </Container>
         </React.Fragment>
     )
 }
 
-export default Me;
+const mapStateToProps = state => ({
+    currentUser: state.auth.user,
+    profileUser: state.user
+})
+
+export default connect(mapStateToProps, { signOut, fetchUser })(Me);
