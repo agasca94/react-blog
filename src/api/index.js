@@ -15,4 +15,10 @@ export default {
 
     updatePost: (postId, post) => 
         client.put(`posts/${postId}`, post),
+
+    getMe: (params) => 
+        client.get('me', { params }),
+
+    fetchUser: (username) => 
+        client.get(`/@${username}`)
 }
