@@ -14,6 +14,7 @@ const useStyles = makeStyles(theme => ({
     },
     toolbarTitle: {
         flex: 1,
+        textDecoration: 'none'
     },
     actionButton: {
         marginLeft: theme.spacing(1),
@@ -78,7 +79,8 @@ export default function Header(props) {
     return (
         <Toolbar className={classes.toolbar}>
             <Typography
-                component='h2'
+                component={Link}
+                to='/blog'
                 variant='h5'
                 color='inherit'
                 align='left'
