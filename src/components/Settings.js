@@ -1,7 +1,14 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Box, TextField, Button } from '@material-ui/core';
+import { 
+    Typography,
+    Container, 
+    makeStyles 
+} from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
+import Loader from './Loader';
+import SettingsForm from './SettingsForm';
+import { saveSettings } from '../actions/settings';
 
 const useStyles = makeStyles(theme => ({
     settings: {
@@ -12,8 +19,15 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function Settings() {
+function Settings(props) {
     const classes = useStyles();
+    const history = useHistory();
+    const { currentUser, loading, saveSettings, error } = props;
+
+    const onSave = settings => {
+        saveSettings(settings)
+            .then(r => !r.error && history.push('/me'));
+    }
 
     return (
         <React.Fragment>
@@ -21,43 +35,21 @@ function Settings() {
                 <Typography variant='h4'>
                     Your Settings
                 </Typography>
-                <form style={{width: '100%'}}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="name"
-                        label="Name"
-                        name="name"
-                        autoFocus
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="email"
-                        label="Email"
-                        name="email"
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="bio"
-                        label="Bio"
-                        name="bio"
-                        multiline
-                        rows='6'
-                    />
-                    <Box display='flex' justifyContent='flex-end'>
-                        <Button variant="contained" color="primary" disableElevation size='large'>
-                            Save
-                        </Button>
-                    </Box>
-                </form>
+                {currentUser &&
+                    <SettingsForm user={currentUser} onSave={onSave} errors={error?.errors}/>
+                }
+                {(!currentUser || loading) &&
+                    <Loader/>
+                }
             </Container>
         </React.Fragment>
     );
 }
 
-export default Settings;
+const mapStateToProps = state => ({
+    currentUser: state.auth.user,
+    loading: state.settings.loading,
+    error: state.settings.error
+})
+
+export default connect(mapStateToProps, { saveSettings })(Settings);

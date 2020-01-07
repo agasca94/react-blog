@@ -14,6 +14,7 @@ export default (state={}, action) => {
             user: null,
             error: action.error
         }
+    case types.SAVE_SETTINGS_SUCCESS:
     case types.GET_ME_SUCCESS:
         return {
             ...state,

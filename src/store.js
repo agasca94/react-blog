@@ -15,7 +15,7 @@ const localStorageMiddleware = store => next => action => {
         setToken(null);
     }
   
-    next(action);
+    return next(action);
 };
 
 const loadToken = () => {

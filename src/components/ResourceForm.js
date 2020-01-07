@@ -2,16 +2,27 @@ import React from 'react';
 import { handleObjectChange } from './formUtils';
 
 function ResourceForm(props) {
-    const { resource: initialValues, onSubmit, children, ...rest } = props;
-    const [resource, setResource] = React.useState(initialValues)
-    
-    const handle = handleObjectChange(setResource);
+    const { 
+        resource: initialValues, 
+        onSubmit, 
+        normalize, 
+        children, 
+        ...rest 
+    } = props;
+
+    const [resource, setResource] = React.useState(
+        normalize?.(initialValues) || {...initialValues}
+    )
 
     React.useEffect(() => {
         if (initialValues) {
-            setResource(initialValues)
+            setResource(
+                normalize?.(initialValues) || {...initialValues}
+            )
         };
-    }, [initialValues]);
+    }, [initialValues, normalize]);
+
+    const handle = handleObjectChange(setResource);
 
     const submit = (e) => {
         e.preventDefault();

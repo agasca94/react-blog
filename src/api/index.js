@@ -7,18 +7,21 @@ export default {
     register: (name, username, email, password) => 
         client.post('register', { name, username, email, password }),
 
-    fetchPost: (postId) => 
+    fetchPost: postId => 
         client.get(`posts/${postId}`),
 
-    createPost: (post) => 
+    createPost: post => 
         client.post('posts', post),
 
     updatePost: (postId, post) => 
         client.put(`posts/${postId}`, post),
 
-    getMe: (params) => 
+    getMe: params => 
         client.get('me', { params }),
 
-    fetchUser: (username) => 
+    updateUser: user => 
+        client.put('/me', user),
+
+    fetchUser: username => 
         client.get(`/@${username}`)
 }
