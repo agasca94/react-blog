@@ -2,17 +2,16 @@ import React from 'react';
 import { Box, TextField, Button } from '@material-ui/core';
 import ResourceForm from './ResourceForm';
 
-const normalizaResource = (resource) => ({
-    title: resource?.title || '',
-    contents: resource?.contents || ''
+const normalizePost = post => ({
+    title: post?.title || '',
+    contents: post?.contents || ''
 })
 
 function PostForm(props) {
     const { post, onSave } = props;
-    const initialValues = normalizaResource(post);
 
     return (
-        <ResourceForm style={{width: '100%'}} resource={initialValues} onSubmit={onSave}>
+        <ResourceForm resource={post} normalize={normalizePost} onSubmit={onSave} style={{width: '100%'}}>
             <TextField
                 variant="outlined"
                 margin="normal"
