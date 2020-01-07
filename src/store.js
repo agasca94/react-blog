@@ -36,6 +36,6 @@ export default createStore(
     rootReducer,
     loadToken(),
     composeEnhancers(
-        applyMiddleware(localStorageMiddleware, thunkMiddleware)
+        applyMiddleware(thunkMiddleware, localStorageMiddleware)
     )
 );

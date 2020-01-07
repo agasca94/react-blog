@@ -38,6 +38,7 @@ function App(props) {
             <Switch>
                 <Route path='/blog' component={Blog}/>
                 <Route path='/@:username' component={Me}/>
+                <PrivateRoute path='/me' component={Me}/>
                 <PrivateRoute path='/editor/:postId' component={Editor}/>
                 <PrivateRoute path='/editor' component={Editor}/>
                 <PrivateRoute path='/settings' component={Settings}/>

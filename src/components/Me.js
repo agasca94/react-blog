@@ -6,7 +6,6 @@ import {
     Typography, 
     Container, 
     Button,
-    CircularProgress,
     CssBaseline,
     makeStyles
 } from '@material-ui/core';
@@ -15,6 +14,7 @@ import { connect } from 'react-redux';
 import { signOut } from '../actions/auth';
 import { fetchUser } from '../actions/user';
 import BlogMainContent from './BlogMainContent';
+import Loader from './Loader';
 
 const useStyles = makeStyles(theme => ({
     large: {
@@ -49,27 +49,21 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.error.light,
         borderColor: theme.palette.error.light,
     },
-    loader: {
-        position: 'absolute',
-        left: '50%',
-        top: '40%'
-    }
 }))
 
 function Me(props) {
     const classes = useStyles();
     const { username } = useParams();
-    const { signOut, currentUser, profileUser, fetchUser } = props;
-    const isCurrentUser = currentUser?.username === username;
-    const user = isCurrentUser ? currentUser : profileUser;
+    const { signOut, currentUser, fetchedUser, fetchUser } = props;
+    const user = username ? fetchedUser : currentUser;
 
     React.useEffect(
-        () => fetchUser(username), 
+        () => username && fetchUser(username),
         [fetchUser, username]
     );
 
     if (!user) {
-        return <CircularProgress size={80} className={classes.loader}/>
+        return <Loader/>
     }
 
     return (
@@ -84,7 +78,7 @@ function Me(props) {
                     <Typography variant='h4' className={classes.username}>
                         {user.username}
                     </Typography>
-                    {isCurrentUser &&
+                    {!username &&
                         <Container className={classes.bannerActions}>
                             <Button
                                 to='/settings'
@@ -121,7 +115,7 @@ function Me(props) {
 
 const mapStateToProps = state => ({
     currentUser: state.auth.user,
-    profileUser: state.user
+    fetchedUser: state.user
 })
 
 export default connect(mapStateToProps, { signOut, fetchUser })(Me);

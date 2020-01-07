@@ -62,7 +62,7 @@ function LoggedInActions(currentUser) {
             </Button>
             <Button
                 className={classes.actionButton} 
-                to={`/@${currentUser.username}`}
+                to={'/me'}
                 component={Link}
                 size='large'
             >
