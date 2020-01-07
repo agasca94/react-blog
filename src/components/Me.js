@@ -58,7 +58,9 @@ function Me(props) {
     const user = username ? fetchedUser : currentUser;
 
     React.useEffect(
-        () => username && fetchUser(username),
+        () => {
+            if (username) fetchUser(username)
+        },
         [fetchUser, username]
     );
 
