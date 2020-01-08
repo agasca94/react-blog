@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Divider } from '@material-ui/core';
-import Post from './Post';
+import PostPreview from './PostPreview';
 
 function BlogMainContent(props) {
     const { posts, title } = props;
@@ -11,7 +11,7 @@ function BlogMainContent(props) {
             </Typography>
             <Divider/>
             {posts.map(post => 
-                <Post key={post.id} post={post}></Post>
+                <PostPreview key={post.id} post={post} />
             )}
         </React.Fragment>
     );

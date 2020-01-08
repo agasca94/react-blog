@@ -81,7 +81,7 @@ export default function Header(props) {
             <Typography
                 component={Link}
                 to='/blog'
-                variant='h5'
+                variant='h4'
                 color='inherit'
                 align='left'
                 noWrap
