@@ -8,7 +8,7 @@ const normalizePost = post => ({
 })
 
 function PostForm(props) {
-    const { post, onSave } = props;
+    const { post, onSave, errors } = props;
 
     return (
         <ResourceForm resource={post} normalize={normalizePost} onSubmit={onSave} style={{width: '100%'}}>
@@ -20,6 +20,8 @@ function PostForm(props) {
                 label="Title"
                 required
                 autoFocus
+                error={errors?.hasOwnProperty('title')}
+                helperText={errors?.title}
             />
             <TextField
                 variant="outlined"
@@ -30,6 +32,8 @@ function PostForm(props) {
                 required
                 multiline
                 rows='30'
+                error={errors?.hasOwnProperty('contents')}
+                helperText={errors?.contents}
             />
             <Box display='flex' justifyContent='flex-end'>
                 <Button variant="contained" color="primary" disableElevation size='large' type='submit'>

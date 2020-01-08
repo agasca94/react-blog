@@ -6,20 +6,35 @@ export default (state={}, action) => {
         return {
             ...state,
             post: null,
+            loading: true,
             error: null
         }
-    case types.FETCH_POST_SUCCESS:
+    case types.SAVE_POST_REQUEST:
         return {
             ...state,
-            post: action.post,
+            loading: true,
             error: null
         }
-    
     case types.FETCH_POST_ERROR:
         return {
             ...state,
             post: null,
+            loading: false,
             error: action.error
+        }
+    case types.SAVE_POST_ERROR:
+        return {
+            ...state,
+            loading: false,
+            error: action.error
+        }
+    case types.SAVE_POST_SUCCESS:
+    case types.FETCH_POST_SUCCESS:
+        return {
+            ...state,
+            post: action.post,
+            loading: false,
+            error: null
         }
     default:
         return state;
