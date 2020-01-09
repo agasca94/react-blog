@@ -4,6 +4,7 @@ import ResourceForm from './ResourceForm';
 
 const normalizePost = post => ({
     title: post?.title || '',
+    description: post?.description || '',
     contents: post?.contents || ''
 })
 
@@ -27,8 +28,23 @@ function PostForm(props) {
                 variant="outlined"
                 margin="normal"
                 fullWidth
+                name="description"
+                label="Description"
+                placeholder='Whats your article about?'
+                required
+                multiline
+                rows='3'
+                autoFocus
+                error={errors?.hasOwnProperty('description')}
+                helperText={errors?.description}
+            />
+            <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
                 name="contents"
                 label="Content"
+                placeholder='Write your article (in markdown)'
                 required
                 multiline
                 rows='30'
