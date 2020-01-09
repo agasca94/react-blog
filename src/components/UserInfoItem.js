@@ -22,6 +22,9 @@ const useStyles = makeStyles(theme => ({
     },
     secondaryText: {
         color: theme.palette.text.secondary
+    },
+    itemRoot: {
+        width: 'inherit'
     }
 }))
 
@@ -32,17 +35,21 @@ function UserInfoItem(props) {
     const lightTheme = theme === 'light';
 
     return (
-        <ListItem disableGutters>
+        <ListItem disableGutters className={classes.itemRoot}>
             <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src="https://static.productionready.io/images/smiley-cyrus.jpg" />
+                <Avatar alt={post.author.username} src="https://static.productionready.io/images/smiley-cyrus.jpg" />
             </ListItemAvatar>
             <ListItemText 
                 primary={
-                    <Link className={lightTheme ? classes.primaryText : classes.whiteText} component={ReactLink} to={`@${post.author.username}`}>
-                        <Typography variant='h6'>
+                    <Typography variant='h6'>
+                        <Link 
+                            className={lightTheme ? classes.primaryText : classes.whiteText} 
+                            component={ReactLink} 
+                            to={`/@${post.author.username}`}
+                        >
                             {post.author.username}
-                        </Typography>
-                    </Link>
+                        </Link>
+                    </Typography>
                 }
                 secondary={formatDate(date)}
                 secondaryTypographyProps={{

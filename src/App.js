@@ -11,6 +11,7 @@ import Settings from './components/Settings';
 import Me from './components/Me';
 import PrivateRoute from './components/PrivateRoute';
 import Editor from './components/Editor';
+import Post from './components/Post';
 import { Container } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { getMe } from './actions/auth';
@@ -37,6 +38,7 @@ function App(props) {
             }
             <Switch>
                 <Route path='/blog' component={Blog}/>
+                <Route path='/post/:postId' component={Post}/>
                 <Route path='/@:username' component={Me}/>
                 <PrivateRoute path='/me' component={Me}/>
                 <PrivateRoute path='/editor/:postId' component={Editor}/>

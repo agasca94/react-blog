@@ -1,51 +1,116 @@
 import React from 'react';
-import ReactMarkdown from 'markdown-to-jsx';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import Avatar from '@material-ui/core/Avatar';
-import { Link as ReactLink } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import { 
+    CssBaseline,
+    Box,
+    Container,
+    Typography,
+    Divider,
+    Button,
+    makeStyles
+} from '@material-ui/core';
+import { Edit, Delete } from '@material-ui/icons';
+import { Link, useParams } from 'react-router-dom';
+import { connect } from 'react-redux';
+import UserInfoItem from './UserInfoItem';
+import PostMarkdown from './PostMarkdown';
+import Loader from './Loader';
+import { fetchPost } from '../actions/posts';
 
 const useStyles = makeStyles(theme => ({
-    markdown: {
-        ...theme.typography.body2,
+    banner: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignContent: 'flex-start',
+        justifyContent: 'center',
+        width: '100%',
+        height: '17vh'
     },
-    post: {
-        padding: theme.spacing(3, 0)
+    bannerActions: {
+        display: 'flex',
+        marginTop: theme.spacing(2),
+        justifyContent: 'center',
     },
-    small: {
-        width: theme.spacing(3),
-        height: theme.spacing(3),
+    username: {
+        color: theme.palette.common.white
+    },
+    posts: {
+        marginTop: theme.spacing(2)
+    },
+    editButton: {
+        margin: theme.spacing(0, 3),
+        color: theme.palette.grey[300],
+        borderColor: theme.palette.grey[300],
+    },
+    deleteButton: {
+        color: theme.palette.error.light,
+        borderColor: theme.palette.error.light,
     },
 }))
 
-const options = {
-    overrides: {
-        h2: { component: Typography, props: { gutterBottom: true, variant: 'h6' } },
-        h3: { component: Typography, props: { gutterBottom: true, variant: 'subtitle1' } },
-        p: { component: Typography, props: { paragraph: true } },
-        a: { component: Link }
-    }
-}
-
 function Post(props) {
-    const { post } = props;
     const classes = useStyles();
+    const { postId } = useParams();
+    const { post, user, fetchPost } = props;
+
+    React.useEffect(() => {
+        fetchPost(postId)
+    }, [fetchPost, postId])
+
+    if (!post) {
+        return <Loader />
+    }
+
+    const del = () => {
+
+    }
 
     return (
-        <div className={classes.post}>
-            <Typography gutterBottom={true} variant='h5'>
-                {post.title}
-            </Typography>
-            <Avatar className={classes.small} alt="Remy Sharp" src="https://static.productionready.io/images/smiley-cyrus.jpg" />
-            <Typography gutterBottom={true} variant='caption' paragraph={true}>
-                {post.created_at} by <Link component={ReactLink} to={`@${post.author.username}`}>{post.author.name}</Link>
-            </Typography>
-            <ReactMarkdown className={classes.markdown} options={options}>
-                {post.contents}
-            </ReactMarkdown>
-        </div>
-    )
+        <React.Fragment>
+            <CssBaseline/>
+            <Box bgcolor='#424242'>
+                <Container className={classes.banner} maxWidth='lg'>
+                    <Typography variant='h4' className={classes.username}>
+                        { post.title }
+                    </Typography>
+                    <Box display='flex'>
+                        <UserInfoItem theme='dark' post={post}/>
+                        {post.author.id === user?.id &&
+                            <Box alignItems='center' display='flex'>
+                                <Button
+                                    to={`/editor/${postId}`}
+                                    component={Link}
+                                    size='small'
+                                    variant='outlined'
+                                    className={classes.editButton}
+                                    startIcon={<Edit/>}
+                                >
+                                    Edit
+                                </Button>
+                                <Button
+                                    onClick={del}
+                                    size='small'
+                                    variant='outlined'
+                                    className={classes.deleteButton}
+                                    startIcon={<Delete/>}
+                                >
+                                    Delete
+                                </Button>
+                            </Box>
+                        }
+                    </Box>
+                </Container>
+            </Box>
+            <Container maxWidth='lg' className={classes.posts}>
+                <PostMarkdown contents={post.contents}/>
+                <Divider />
+            </Container>
+        </React.Fragment>
+    );
 }
 
-export default Post;
+const mapStateToProps = state => ({
+    post: state.blog.post,
+    user: state.auth.user
+})
+
+export default connect(mapStateToProps, { fetchPost })(Post);
