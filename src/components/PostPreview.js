@@ -1,12 +1,17 @@
 import React from 'react';
 import { Typography, Divider, makeStyles } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import UserInfoItem from './UserInfoItem';
 import PostMarkdown from './PostMarkdown';
 
 const useStyles = makeStyles(theme => ({
     post: {
-        padding: theme.spacing(3, 0)
+        paddingBottom: theme.spacing(3)
     },
+    markdownLink: {
+        textDecoration: 'none',
+        color: 'inherit'
+    }
 }))
 
 function Post(props) {
@@ -16,11 +21,14 @@ function Post(props) {
     return (
         <React.Fragment>
             <div className={classes.post}>
-                <Typography variant='h5'>
-                    {post.title}
-                </Typography>
                 <UserInfoItem post={post} />
-                <PostMarkdown contents={post.contents}/>
+
+                <Link className={classes.markdownLink} to={`/post/${post.id}`}>
+                    <Typography variant='h6'>
+                        {post.title}
+                    </Typography>
+                    <PostMarkdown contents={post.description}/>
+                </Link>
             </div>
             <Divider />
         </React.Fragment>
