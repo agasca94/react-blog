@@ -7,6 +7,9 @@ export default {
     register: (name, username, email, password) => 
         client.post('register', { name, username, email, password }),
 
+    fetchPosts: () =>
+        client.get('posts'),
+
     fetchPost: postId => 
         client.get(`posts/${postId}`),
 

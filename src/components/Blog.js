@@ -1,69 +1,10 @@
 import React from 'react';
 import Sidebar from './Sidebar';
-import { CssBaseline, Container } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles'
+import { CssBaseline, Container, Grid, makeStyles } from '@material-ui/core';
+import { connect } from 'react-redux';
 import BlogMainContent from './BlogMainContent';
+import { fetchPosts } from '../actions/posts';
 
-const posts = [
-    {
-        id: 1,
-        title: 'A new post',
-        created_at: 'April 1, 2020',
-        author: {name: 'Arturo', username: 'agasca'},
-        contents: `
-Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum.
-Aenean lacinia bibendum nulla sed consectetur.
-
-## Heading
-
-Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
-### Sub-heading
-
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.`
-    },
-    {
-        id: 2,
-        title: 'A new post',
-        created_at: 'April 1, 2020',
-        author: {name: 'Arturo', username: 'agasca'},
-        contents: `
-Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum.
-Aenean lacinia bibendum nulla sed consectetur.
-
-## Heading
-
-Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
-### Sub-heading
-
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.`
-    },
-    {
-        id: 3,
-        title: 'A new post',
-        created_at: 'April 1, 2020',
-        author: {name: 'Arturo', username: 'agasca'},
-        contents: `
-Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum.
-Aenean lacinia bibendum nulla sed consectetur.
-
-## Heading
-
-Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
-### Sub-heading
-
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.`
-    },
-]
 const sidebar = {
     title: 'About',
     description: 'Just another blog app made with React and a Python backend',
@@ -82,8 +23,14 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function Blog() {
+function Blog(props) {
     const classes = useStyles();
+    const { fetchPosts, posts } = props;
+
+    React.useEffect(() => {
+        fetchPosts()
+    }, [fetchPosts])
+
     return (
         <React.Fragment>
             <CssBaseline/>
@@ -92,7 +39,7 @@ function Blog() {
                     <Grid container spacing={5} className={classes.mainGrid}>
                         <Grid item xs={12} md={8}>
                             <BlogMainContent
-                                posts={posts}
+                                posts={posts || []}
                                 title='Recently published'
                             />
                         </Grid>
@@ -111,4 +58,8 @@ function Blog() {
     )
 }
 
-export default Blog;
+const mapStateToProps = state => ({
+    posts: state.blog.posts
+})
+
+export default connect(mapStateToProps, { fetchPosts })(Blog);

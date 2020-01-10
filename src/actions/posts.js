@@ -12,6 +12,17 @@ export const fetchPost = postId => async dispatch => {
     }
 }
 
+export const fetchPosts = () => async dispatch => {
+    dispatch(fetchPostsRequest())
+    try {
+        const res = await api.fetchPosts();
+        return dispatch(fetchPostsSuccess(res.data));
+    }
+    catch (e) {
+        return dispatch(fetchPostsError(e.response.data));
+    }
+}
+
 export const createPost = post => async dispatch => {
     dispatch(savePostRequest())
     try {
@@ -34,26 +45,41 @@ export const updatePost = (postId, post) => async dispatch => {
     }
 }
 
+
 export const fetchPostRequest = () => ({
     type: types.FETCH_POST_REQUEST
 })
-export const fetchPostSuccess = (post) => ({
+export const fetchPostSuccess = post => ({
     type: types.FETCH_POST_SUCCESS,
     post
 })
-export const fetchPostError = (error) => ({
+export const fetchPostError = error => ({
     type: types.FETCH_POST_ERROR,
     error
 })
 
+
+export const fetchPostsRequest = () => ({
+    type: types.FETCH_POSTS_REQUEST
+})
+export const fetchPostsSuccess = posts => ({
+    type: types.FETCH_POSTS_SUCCESS,
+    posts
+})
+export const fetchPostsError = error => ({
+    type: types.FETCH_POSTS_ERROR,
+    error
+})
+
+
 export const savePostRequest = () => ({
     type: types.SAVE_POST_REQUEST
 })
-export const savePostSuccess = (post) => ({
+export const savePostSuccess = post => ({
     type: types.SAVE_POST_SUCCESS,
     post
 })
-export const savePostError = (error) => ({
+export const savePostError = error => ({
     type: types.SAVE_POST_ERROR,
     error
 })
