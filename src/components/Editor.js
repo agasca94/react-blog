@@ -19,15 +19,25 @@ const Editor = (props) => {
     const classes = useStyles();
     const { postId } = useParams();
     const history = useHistory();
-    const { fetchPost, createPost, updatePost, post, error } = props;
+    const { user, fetchPost, createPost, updatePost, post, error } = props;
     const savePost = post => 
         postId ? 
             updatePost(postId, post) : 
             createPost(post)
     const onSave = post => {
         savePost(post)
-            .then(res => !res.error && history.push('/blog'))
+            .then(res => 
+                !res.error && history.push(`/post/${res.post.id}`)
+            )
     }
+
+    React.useEffect(() => {
+        if (postId && post && user) {
+            if (post.author.id !== user.id) {
+                history.replace('/blog')
+            }
+        }
+    }, [postId, post, user, history])
 
     React.useEffect(() => {
         if (postId) fetchPost(postId)
@@ -39,7 +49,7 @@ const Editor = (props) => {
                 <Typography variant='h4' align='center'>
                     {postId ? 'Edit post' : 'New post'}
                 </Typography>
-                <PostForm onSave={onSave} post={post} errors={error?.errors} />
+                <PostForm onSave={onSave} post={postId ? post : {}} errors={error?.errors} />
             </Container>
         </React.Fragment>
     );
@@ -47,7 +57,8 @@ const Editor = (props) => {
 
 const mapStateToProps = (state) => ({
     post: state.blog.post,
-    error: state.blog.error
+    error: state.blog.error,
+    user: state.auth.user
 })
 
 export default connect(
