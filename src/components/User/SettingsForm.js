@@ -4,7 +4,7 @@ import {
     TextField, 
     Button, 
 } from '@material-ui/core';
-import ResourceForm from './ResourceForm';
+import ResourceForm from 'components/ResourceForm';
 
 const normalizeUser = user => ({
     name: user?.name || '',

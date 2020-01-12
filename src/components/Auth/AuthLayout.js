@@ -1,13 +1,20 @@
 import React from 'react';
-import { Link, Box, Avatar, Grid, Typography, Container, makeStyles } from '@material-ui/core';
+import { Link,
+    Box, 
+    Avatar, 
+    Grid, 
+    Typography, 
+    Container, 
+    makeStyles 
+} from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { Link as ReactLink, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Copyright from './Copyright';
-import { login, register } from '../actions/auth';
+import Copyright from 'components/Copyright';
+import WarningMessage from 'components/WarningMessage';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
-import WarningMessage from './WarningMessage';
+import { login, register } from 'actions/auth';
 
 const types = {
     LOGIN: 'login',

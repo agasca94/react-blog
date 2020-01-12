@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, TextField, Button } from '@material-ui/core';
-import ResourceForm from './ResourceForm';
+import ResourceForm from 'components/ResourceForm';
 
 const normalizePost = post => ({
     title: post?.title || '',

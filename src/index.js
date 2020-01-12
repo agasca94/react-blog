@@ -2,9 +2,9 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { client } from './api/client';
-import store from './store';
-import { signOut } from './actions/auth';
+import { client } from 'api/client';
+import { signOut } from 'actions/auth';
+import store from 'store';
 
 import App from './App';
 

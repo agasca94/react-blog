@@ -11,10 +11,10 @@ import {
 } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { signOut } from '../actions/auth';
-import { fetchUser } from '../actions/user';
-import BlogMainContent from './BlogMainContent';
-import Loader from './Loader';
+import BlogMainContent from 'components/Blog/BlogMainContent';
+import Loader from 'components/Loader';
+import { fetchUser } from 'actions/user';
+import { signOut } from 'actions/auth';
 
 const useStyles = makeStyles(theme => ({
     large: {

@@ -4,17 +4,17 @@ import {
     Switch,
     useLocation
 } from 'react-router-dom';
-import Header from './components/Header';
-import Auth from './components/Auth';
-import Blog from './components/Blog';
-import Settings from './components/Settings';
-import Me from './components/Me';
-import PrivateRoute from './components/PrivateRoute';
-import Editor from './components/Editor';
-import Post from './components/Post';
 import { Container } from '@material-ui/core';
 import { connect } from 'react-redux';
-import { getMe } from './actions/auth';
+import Header from 'components/Header';
+import Auth from 'components/Auth/Auth';
+import Blog from 'components/Blog/Blog';
+import Settings from 'components/User/Settings';
+import Me from 'components/User/Me';
+import PrivateRoute from 'components/PrivateRoute';
+import Editor from 'components/Blog/Editor';
+import Post from 'components/Blog/Post';
+import { getMe } from 'actions/auth';
 
 function renderToolbar(path) {
     const AUTH_ROUTES = ['/', '/register', '/login'];

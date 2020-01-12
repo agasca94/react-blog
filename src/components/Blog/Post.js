@@ -11,10 +11,10 @@ import {
 import { Edit, Delete } from '@material-ui/icons';
 import { Link, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
+import Loader from 'components/Loader';
 import UserInfoItem from './UserInfoItem';
 import PostMarkdown from './PostMarkdown';
-import Loader from './Loader';
-import { fetchPost } from '../actions/posts';
+import { fetchPost } from 'actions/posts';
 
 const useStyles = makeStyles(theme => ({
     banner: {

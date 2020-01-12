@@ -1,8 +1,7 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, SnackbarContent } from '@material-ui/core';
 import { amber } from '@material-ui/core/colors';
 import WarningIcon from '@material-ui/icons/Warning';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 const useStyles1 = makeStyles(theme => ({
     warning: {

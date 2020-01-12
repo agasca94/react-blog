@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { makeStyles, Toolbar, Button, Typography, Box } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { Box } from '@material-ui/core';
-import CreateIcon from '@material-ui/icons/Create'
+import CreateIcon from '@material-ui/icons/Create';
 
 const useStyles = makeStyles(theme => ({
     toolbar: {

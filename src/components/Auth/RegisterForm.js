@@ -1,7 +1,5 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Button, TextField } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -13,10 +11,12 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function LoginForm(props) {
+function RegisterForm(props) {
     const classes = useStyles();
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [name, setName] = React.useState('');
+    const [username, setUsername] = React.useState('');
     const handleChange = setter => e => setter(e.target.value);
 
     return (
@@ -26,11 +26,38 @@ function LoginForm(props) {
                 margin="normal"
                 required
                 fullWidth
+                id="name"
+                label="Name"
+                name="name"
+                autoFocus
+                value={name}
+                error={props.errors?.hasOwnProperty('name')}
+                helperText={props.errors?.name}
+                onChange={handleChange(setName)}
+            />
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoFocus
+                value={username}
+                error={props.errors?.hasOwnProperty('username')}
+                helperText={props.errors?.username}
+                onChange={handleChange(setUsername)}
+            />
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                autoFocus
                 value={email}
                 error={props.errors?.hasOwnProperty('email')}
                 helperText={props.errors?.email}
@@ -56,12 +83,12 @@ function LoginForm(props) {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-                onClick={() => props.onLogin(email, password)}
+                onClick={() => props.onRegister(name, username, email, password)}
             >
-                Sign In
+                    Sign Up
             </Button>
         </form>
     );
 }
 
-export default LoginForm;
+export default RegisterForm;

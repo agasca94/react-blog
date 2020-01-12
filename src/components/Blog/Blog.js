@@ -1,9 +1,9 @@
 import React from 'react';
-import Sidebar from './Sidebar';
 import { CssBaseline, Container, Grid, makeStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
+import Sidebar from 'components/Sidebar';
 import BlogMainContent from './BlogMainContent';
-import { fetchPosts } from '../actions/posts';
+import { fetchPosts } from 'actions/posts';
 
 const sidebar = {
     title: 'About',

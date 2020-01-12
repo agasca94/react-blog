@@ -1,10 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { useParams, useHistory } from 'react-router-dom';
-import { Typography, Container } from '@material-ui/core';
+import { Typography, Container, makeStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
-import { fetchPost, createPost, updatePost } from '../actions/posts';
 import PostForm from './PostForm';
+import { fetchPost, createPost, updatePost } from 'actions/posts';
 
 const useStyles = makeStyles(theme => ({
     editor: {

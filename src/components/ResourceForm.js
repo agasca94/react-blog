@@ -1,5 +1,5 @@
 import React from 'react';
-import { handleObjectChange } from './formUtils';
+import { handleObjectChange } from 'utils';
 
 function ResourceForm(props) {
     const { 

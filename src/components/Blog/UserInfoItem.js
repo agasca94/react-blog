@@ -8,7 +8,7 @@ import { Link,
     makeStyles
 } from '@material-ui/core';
 import { Link as ReactLink } from 'react-router-dom';
-import { formatDate } from './dateUtils';
+import { formatDate } from 'utils';
 
 const useStyles = makeStyles(theme => ({
     whiteText: {

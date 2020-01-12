@@ -6,9 +6,9 @@ import {
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Loader from './Loader';
-import SettingsForm from './SettingsForm';
-import { saveSettings } from '../actions/settings';
+import SettingsForm from 'components/User/SettingsForm';
+import Loader from 'components/Loader';
+import { saveSettings } from 'actions/settings';
 
 const useStyles = makeStyles(theme => ({
     settings: {
