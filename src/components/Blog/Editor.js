@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { Typography, Container, makeStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 import PostForm from './PostForm';
-import { fetchPost, createPost, updatePost } from 'actions/posts';
+import { fetchPost, createPost, updatePost } from 'actions/post';
 
 const useStyles = makeStyles(theme => ({
     editor: {
@@ -55,8 +55,8 @@ const Editor = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    post: state.blog.post,
-    error: state.blog.error,
+    post: state.post.currentPost,
+    error: state.post.error,
     user: state.auth.user
 })
 
