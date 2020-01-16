@@ -41,7 +41,7 @@ function UserInfoItem(props) {
             </ListItemAvatar>
             <ListItemText 
                 primary={
-                    <Typography variant='h6'>
+                    <Typography variant='body1'>
                         <Link 
                             className={lightTheme ? classes.primaryText : classes.whiteText} 
                             component={ReactLink} 
