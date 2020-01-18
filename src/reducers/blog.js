@@ -1,6 +1,13 @@
 import * as types from 'actions/types';
 
-export default (state={}, action) => {
+const initialState = {
+    entities: {
+        posts: {},
+        users: {}
+    }
+}
+
+export default (state=initialState, action) => {
     switch(action.type) {
     case types.FETCH_POSTS_REQUEST:
         return {
@@ -17,7 +24,12 @@ export default (state={}, action) => {
     case types.FETCH_POSTS_SUCCESS:
         return {
             ...state,
-            posts: action.posts,
+            
+            ...action.entities,
+            
+            page: action.pagination.page,
+            pages: action.pagination.pages,
+
             loading: false,
             error: null
         }

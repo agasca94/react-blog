@@ -58,8 +58,16 @@ function Blog(props) {
     )
 }
 
-const mapStateToProps = state => ({
-    posts: state.blog.posts
-})
+const mapStateToProps = state => {
+    const { posts, users } = state.blog.entities;
+    const { result: postsIds } = state.blog;
+    
+    return {
+        posts: postsIds?.map(postId => ({
+            ...posts[postId],
+            author: users[posts[postId].author]
+        }))
+    }
+}
 
 export default connect(mapStateToProps, { fetchPosts })(Blog);

@@ -4,7 +4,7 @@ import { Typography, Link , makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     markdown: {
-        ...theme.typography.body2,
+        ...theme.typography.body1,
     },
 }))
 
