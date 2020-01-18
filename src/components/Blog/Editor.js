@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { Typography, Container, makeStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 import PostForm from './PostForm';
-import { fetchPost, createPost, updatePost } from 'actions/post';
+import { fetchPost, savePost } from 'actions/post';
 
 const useStyles = makeStyles(theme => ({
     editor: {
@@ -18,15 +18,12 @@ const Editor = (props) => {
     const classes = useStyles();
     const { postId } = useParams();
     const history = useHistory();
-    const { user, fetchPost, createPost, updatePost, post, error } = props;
-    const savePost = post => 
-        postId ? 
-            updatePost(postId, post) : 
-            createPost(post)
+    const { user, fetchPost, savePost, post, error } = props;
+
     const onSave = post => {
-        savePost(post)
+        savePost(post, postId)
             .then(res => 
-                !res.error && history.push(`/post/${res.post.id}`)
+                !res.error && history.push(`/post/${res.payload.id}`)
             )
     }
 
@@ -48,7 +45,11 @@ const Editor = (props) => {
                 <Typography variant='h4' align='center'>
                     {postId ? 'Edit post' : 'New post'}
                 </Typography>
-                <PostForm onSave={onSave} post={postId ? post : {}} errors={error?.errors} />
+                <PostForm 
+                    onSave={onSave} 
+                    post={postId ? post : {}} 
+                    errors={error?.errors} 
+                />
             </Container>
         </React.Fragment>
     );
@@ -62,5 +63,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(
     mapStateToProps,
-    { fetchPost, createPost, updatePost })
+    { fetchPost, savePost })
 (Editor);

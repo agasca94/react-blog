@@ -16,8 +16,14 @@ export default {
     createPost: post => 
         client.post('posts', post),
 
-    updatePost: (postId, post) => 
+    updatePost: (post, postId) => 
         client.put(`posts/${postId}`, post),
+
+    fetchComments: (postId) => 
+        client.get(`posts/${postId}/comments`),
+
+    createComment: (postId, comment) => 
+        client.post(`posts/${postId}/comments`, comment),
 
     getMe: params => 
         client.get('me', { params }),

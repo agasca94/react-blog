@@ -18,14 +18,14 @@ export default (state={}, action) => {
     case types.GET_ME_SUCCESS:
         return {
             ...state,
-            user: action.user,
+            user: action.payload,
             error: null
         }
     case types.SIGN_IN_SUCCESS:
         return {
             ...state,
-            token: action.user.token,
-            user: action.user,
+            token: action.payload.token,
+            user: action.payload,
             error: null
         }
     case types.SIGN_OUT:

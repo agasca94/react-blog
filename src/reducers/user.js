@@ -9,7 +9,7 @@ export default function(state={}, action) {
     case types.FETCH_USER_SUCCESS:
         return {
             error: null,
-            ...action.user
+            ...action.payload
         }
     case types.FETCH_USER_ERROR:
         return {

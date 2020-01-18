@@ -32,7 +32,7 @@ export default (state={}, action) => {
     case types.SAVE_POST_SUCCESS:
         return {
             ...state,
-            currentPost: action.post,
+            currentPost: action.payload,
             loading: false,
             error: null
         }
