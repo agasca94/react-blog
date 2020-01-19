@@ -55,10 +55,10 @@ const Editor = (props) => {
     );
 }
 
-const mapStateToProps = (state) => ({
-    post: state.post.currentPost,
-    error: state.post.error,
-    user: state.auth.user
+const mapStateToProps = ({ post, auth }) => ({
+    post: post.data.currentPost,
+    error: post.state.error,
+    user: auth.data.currentUser
 })
 
 export default connect(

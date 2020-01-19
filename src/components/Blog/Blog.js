@@ -59,13 +59,14 @@ function Blog(props) {
 }
 
 const mapStateToProps = state => {
-    const { posts, users } = state.blog.entities;
-    const { result: postsIds } = state.blog;
+    // Not quite performant, may update later
+    const { posts, users } = state.blog.data;
+    const { allIds: postsIds, byId: postsById } = posts;
     
     return {
         posts: postsIds?.map(postId => ({
-            ...posts[postId],
-            author: users[posts[postId].author]
+            ...postsById[postId],
+            author: users[postsById[postId].author]
         }))
     }
 }

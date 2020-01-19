@@ -1,40 +1,46 @@
 import * as types from 'actions/types';
+import createStateReducer from './state';
+import { combineReducers } from 'redux';
 
-export default (state={}, action) => {
+const stateReducer = createStateReducer([
+    [types.AUTH_REQUEST],
+    [types.AUTH_ERROR],
+    [types.SIGN_IN_SUCCESS, types.GET_ME_SUCCESS]
+])
+
+const dataReducer = (state={}, action) => {
     switch(action.type) {
+    
     case types.AUTH_REQUEST:
-        return {
-            ...state,
-            user: null,
-            error: null
-        }
     case types.AUTH_ERROR:
         return {
             ...state,
-            user: null,
-            error: action.error
+            currentUser: null,
+        }
+    case types.SIGN_OUT: 
+        return {
+            token: null,
+            currentUser: null
         }
     case types.SAVE_SETTINGS_SUCCESS:
-    case types.GET_ME_SUCCESS:
+    case types.GET_ME_SUCCESS: 
         return {
             ...state,
-            user: action.payload,
-            error: null
+            currentUser: action.payload
         }
-    case types.SIGN_IN_SUCCESS:
+        
+    case types.SIGN_IN_SUCCESS: 
         return {
-            ...state,
-            token: action.payload.token,
-            user: action.payload,
-            error: null
+            currentUser: action.payload,
+            token: action.payload.token
         }
-    case types.SIGN_OUT:
-        return {
-            ...state,
-            token: null,
-            user: null
-        }
+        
     default:
         return state;
     }
 }
+
+export default combineReducers({
+    data: dataReducer,
+    state: stateReducer
+})

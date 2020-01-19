@@ -1,42 +1,34 @@
 import * as types from 'actions/types';
+import createStateReducer from './state';
+import { combineReducers } from 'redux';
 
-export default (state={}, action) => {
+const stateReducer = createStateReducer([
+    [types.SAVE_POST_REQUEST, types.FETCH_POST_REQUEST],
+    [types.SAVE_POST_SUCCESS, types.FETCH_POST_SUCCESS],
+    [types.SAVE_POST_ERROR, types.FETCH_POST_ERROR]
+]);
+
+const postReducer = (state=null, action) => {
     switch(action.type) {
+
     case types.FETCH_POST_REQUEST:
-        return {
-            ...state,
-            currentPost: null,
-            loading: true,
-            error: null
-        }
-    case types.SAVE_POST_REQUEST:
-        return {
-            ...state,
-            loading: true,
-            error: null
-        }
     case types.FETCH_POST_ERROR:
-        return {
-            ...state,
-            currentPost: null,
-            loading: false,
-            error: action.error
-        }
-    case types.SAVE_POST_ERROR:
-        return {
-            ...state,
-            loading: false,
-            error: action.error
-        }
+        return  null;
+
     case types.FETCH_POST_SUCCESS:
     case types.SAVE_POST_SUCCESS:
-        return {
-            ...state,
-            currentPost: action.payload,
-            loading: false,
-            error: null
-        }
+        return  action.payload;
+
     default:
         return state;
     }
 }
+
+const dataReducer = combineReducers({
+    currentPost: postReducer
+})
+
+export default combineReducers({
+    data: dataReducer,
+    state: stateReducer
+})

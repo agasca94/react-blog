@@ -1,39 +1,29 @@
 import * as types from 'actions/types';
+import createStateReducer from './state';
+import { combineReducers } from 'redux';
 
-const initialState = {
-    entities: {
-        posts: {},
-        users: {}
-    }
-}
+const stateReducer = createStateReducer([
+    [types.FETCH_POSTS_REQUEST],
+    [types.FETCH_POSTS_SUCCESS],
+    [types.FETCH_POSTS_ERROR]
+]);
 
-export default (state=initialState, action) => {
-    switch(action.type) {
-    case types.FETCH_POSTS_REQUEST:
-        return {
-            ...state,
-            loading: true,
-            error: null
-        }
-    case types.FETCH_POSTS_ERROR:
-        return {
-            ...state,
-            loading: false,
-            error: action.error
-        }
+const dataReducer = (state={ posts: {}, users: {} }, action) => {
+    switch(action.type){
     case types.FETCH_POSTS_SUCCESS:
         return {
-            ...state,
-            
-            ...action.entities,
-            
-            page: action.pagination.page,
-            pages: action.pagination.pages,
-
-            loading: false,
-            error: null
+            posts: {
+                byId: action.payload.entities.posts,
+                allIds: action.payload.result
+            },
+            users: action.payload.entities.users
         }
     default:
         return state;
     }
 }
+
+export default combineReducers({
+    data: dataReducer,
+    state: stateReducer
+})

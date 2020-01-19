@@ -50,9 +50,9 @@ function App(props) {
     );
 }
 
-const mapStateToProps = state => ({
-    user: state.auth.user,
-    token: state.auth.token
+const mapStateToProps = ({ auth: { data } }) => ({
+    user: data.currentUser,
+    token: data.token
 })
 
 export default connect(mapStateToProps, { getMe })(App);

@@ -115,9 +115,9 @@ function Me(props) {
     )
 }
 
-const mapStateToProps = state => ({
-    currentUser: state.auth.user,
-    fetchedUser: state.user
+const mapStateToProps = ({ auth, user }) => ({
+    currentUser: auth.data.currentUser,
+    fetchedUser: user.data.user
 })
 
 export default connect(mapStateToProps, { signOut, fetchUser })(Me);

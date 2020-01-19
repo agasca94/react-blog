@@ -92,9 +92,9 @@ function Login(props) {
     );
 }
 
-const mapStateToProps = (state) => ({
-    error: state.auth.error,
-    user: state.auth.user
+const mapStateToProps = ({ auth: { data, state } }) => ({
+    error: state.error,
+    user: data.currentUser
 })
 
 export default connect(

@@ -6,7 +6,7 @@ import rootReducer from 'reducers';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const localStorageMiddleware = store => next => action => {
+const localStorageMiddleware = () => next => action => {
     if (action.type === types.SIGN_IN_SUCCESS) {
         const { token } = action.payload;
 
@@ -28,7 +28,9 @@ const loadToken = () => {
     }
     const preloadedState = {
         auth: {
-            token
+            data: {
+                token
+            }
         }
     }
 

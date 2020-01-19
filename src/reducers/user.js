@@ -1,21 +1,31 @@
 import * as types from 'actions/types';
+import createStateReducer from './state';
+import { combineReducers } from 'redux';
 
-export default function(state={}, action) {
-    switch(action.type){
-    case types.FETCH_POST_REQUEST:
-        return {
-            error: null
-        }
+const stateReducer = createStateReducer([
+    [types.FETCH_USER_REQUEST],
+    [types.FETCH_USER_SUCCESS],
+    [types.FETCH_USER_ERROR]
+]);
+
+const userReducer = (state=null, action) => {
+    switch(action.type) {
+
     case types.FETCH_USER_SUCCESS:
-        return {
-            error: null,
-            ...action.payload
-        }
-    case types.FETCH_USER_ERROR:
-        return {
-            error: action.error
-        }
-    default: 
-        return state
+        return  action.payload;
+
+    default:
+        return state;
     }
 }
+
+const dataReducer = (state={}, action) => {
+    return {
+        user: userReducer(state.user, action)
+    }
+}
+
+export default combineReducers({
+    data: dataReducer,
+    state: stateReducer
+})

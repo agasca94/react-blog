@@ -46,10 +46,10 @@ function Settings(props) {
     );
 }
 
-const mapStateToProps = state => ({
-    currentUser: state.auth.user,
-    loading: state.settings.loading,
-    error: state.settings.error
+const mapStateToProps = ({ auth, settings }) => ({
+    currentUser: auth.data.currentUser,
+    loading: settings.state.loading,
+    error: settings.state.error
 })
 
 export default connect(mapStateToProps, { saveSettings })(Settings);
