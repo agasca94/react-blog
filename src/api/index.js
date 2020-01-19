@@ -16,7 +16,7 @@ export default {
     createPost: post => 
         client.post('posts', post),
 
-    updatePost: (post, postId) => 
+    updatePost: (postId, post) => 
         client.put(`posts/${postId}`, post),
 
     fetchComments: (postId) => 

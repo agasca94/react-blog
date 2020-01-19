@@ -5,15 +5,13 @@ import * as types from './types';
 export const login = (email, password) => 
     callApi(
         [types.AUTH_REQUEST, types.SIGN_IN_SUCCESS, types.AUTH_ERROR],
-        api.login,
-        email, password
+        () => api.login(email, password),
     )
 
 export const register = (name, username, email, password) => 
     callApi(
         [types.AUTH_REQUEST, types.SIGN_IN_SUCCESS, types.AUTH_ERROR],
-        api.register,
-        name, username, email, password
+        () => api.register(name, username, email, password),
     )
 
 export const getMe = () => 
