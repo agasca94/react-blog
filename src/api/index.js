@@ -24,6 +24,12 @@ export default {
 
     createComment: (postId, comment) => 
         client.post(`posts/${postId}/comments`, comment),
+    
+    updateComment: (postId, commentId, comment) => 
+        client.put(`posts/${postId}/comments/${commentId}`, comment),
+
+    deleteComment: (postId, commentId) => 
+        client.delete(`posts/${postId}/comments/${commentId}`),
 
     getMe: params => 
         client.get('me', { params }),

@@ -8,8 +8,70 @@ const stateReducer = createStateReducer([
     [types.SAVE_POST_ERROR, types.FETCH_POST_ERROR]
 ]);
 
-const postReducer = (state=null, action) => {
-    switch(action.type) {
+const commentsReducer = (state={ byId:{}, allIds: [] }, { type, payload }) => {
+    switch(type) {
+    case types.FETCH_COMMENTS_SUCCESS:
+        return  {
+            byId: payload.entities.comments,
+            allIds: payload.result,
+        }
+    case types.SAVE_COMMENT_SUCCESS:
+        return {
+            byId: {
+                ...state.byId,
+                ...payload.entities.comments
+            },
+            allIds: [payload.result].concat(state.allIds)
+        }
+    case types.UPDATE_COMMENT_SUCCESS:
+        return {
+            ...state,
+            byId: {
+                ...state.byId,
+                ...payload.entities.comments
+            }
+        }
+    case types.DELETE_COMMENT_SUCCESS:
+        const { [payload.deleted]: value, ...byId } = state.byId;
+        const allIds = state.allIds.filter(id => id !== payload.deleted);
+        return {
+            byId,
+            allIds
+        }
+    
+    default:
+        return state;
+    }
+}
+
+const usersReducer = (state={}, { type, payload }) => {
+    switch(type) {
+
+    case types.FETCH_POST_SUCCESS:
+    case types.SAVE_POST_SUCCESS:
+        return  {
+            ...state,
+            ...payload.entities.users
+        }
+    case types.FETCH_COMMENTS_SUCCESS:
+        return {
+            ...state,
+            ...payload.entities.users
+        }
+    case types.SAVE_COMMENT_SUCCESS:
+        return {
+            ...state,
+            ...payload.entities.users
+        }
+    
+    default:
+        return state;
+    }
+}
+
+const postReducer = (state=null, { type, payload }) => {
+
+    switch(type) {
 
     case types.FETCH_POST_REQUEST:
     case types.FETCH_POST_ERROR:
@@ -17,7 +79,7 @@ const postReducer = (state=null, action) => {
 
     case types.FETCH_POST_SUCCESS:
     case types.SAVE_POST_SUCCESS:
-        return  action.payload;
+        return payload.entities.post[payload.result];
 
     default:
         return state;
@@ -25,7 +87,9 @@ const postReducer = (state=null, action) => {
 }
 
 const dataReducer = combineReducers({
-    currentPost: postReducer
+    currentPost: postReducer,
+    users: usersReducer,
+    comments: commentsReducer
 })
 
 export default combineReducers({
