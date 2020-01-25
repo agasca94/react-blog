@@ -23,7 +23,7 @@ const Editor = (props) => {
     const onSave = post => {
         savePost(post, postId)
             .then(res => 
-                !res.error && history.push(`/post/${res.payload.id}`)
+                !res.error && history.push(`/post/${res.payload.result}`)
             )
     }
 

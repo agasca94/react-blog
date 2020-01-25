@@ -8,56 +8,61 @@ const stateReducer = createStateReducer([
     [types.SAVE_POST_ERROR, types.FETCH_POST_ERROR]
 ]);
 
-const commentsReducer = (state={ byId:{}, allIds: [] }, { type, payload }) => {
+const commentsById = (state={}, { type, payload }) => {
+    
     switch(type) {
     case types.FETCH_COMMENTS_SUCCESS:
-        return  {
-            byId: payload.entities.comments,
-            allIds: payload.result,
-        }
+        return  payload.entities.comments || state;
+
     case types.SAVE_COMMENT_SUCCESS:
-        return {
-            byId: {
-                ...state.byId,
-                ...payload.entities.comments
-            },
-            allIds: [payload.result].concat(state.allIds)
-        }
     case types.UPDATE_COMMENT_SUCCESS:
         return {
             ...state,
-            byId: {
-                ...state.byId,
-                ...payload.entities.comments
-            }
+            ...payload.entities.comments
         }
+
     case types.DELETE_COMMENT_SUCCESS:
-        const { [payload.deleted]: value, ...byId } = state.byId;
-        const allIds = state.allIds.filter(id => id !== payload.deleted);
-        return {
-            byId,
-            allIds
-        }
+        const { [payload.deleted]: _, ...rest } = state;
+        return rest;
+    
+    case types.DELETE_POST_SUCCESS:
+        return {}
+
+    default:
+        return state;
+    }
+}
+
+const allComments = (state=[], { type, payload }) => {
+    switch(type) {
+    case types.FETCH_COMMENTS_SUCCESS:
+        return  payload.result;
+
+    case types.SAVE_COMMENT_SUCCESS:
+        return [payload.result].concat(state);
+
+    case types.DELETE_COMMENT_SUCCESS:
+        return state.filter(id => id !== payload.deleted);
+
+    case types.DELETE_POST_SUCCESS:
+        return [];
     
     default:
         return state;
     }
 }
 
+const commentsReducer = combineReducers({
+    byId: commentsById,
+    allIds: allComments
+})
+
 const usersReducer = (state={}, { type, payload }) => {
     switch(type) {
 
     case types.FETCH_POST_SUCCESS:
     case types.SAVE_POST_SUCCESS:
-        return  {
-            ...state,
-            ...payload.entities.users
-        }
     case types.FETCH_COMMENTS_SUCCESS:
-        return {
-            ...state,
-            ...payload.entities.users
-        }
     case types.SAVE_COMMENT_SUCCESS:
         return {
             ...state,
@@ -73,6 +78,7 @@ const postReducer = (state=null, { type, payload }) => {
 
     switch(type) {
 
+    case types.DELETE_POST_SUCCESS:
     case types.FETCH_POST_REQUEST:
     case types.FETCH_POST_ERROR:
         return  null;
@@ -80,6 +86,13 @@ const postReducer = (state=null, { type, payload }) => {
     case types.FETCH_POST_SUCCESS:
     case types.SAVE_POST_SUCCESS:
         return payload.entities.post[payload.result];
+
+    case types.FAVORITE_POST_SUCCESS:
+        return {
+            ...state,
+            is_favorited: payload.is_favorited,
+            favorites_count: payload.favorites_count
+        }
 
     default:
         return state;

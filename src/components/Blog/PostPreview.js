@@ -1,8 +1,17 @@
 import React from 'react';
-import { Typography, Divider, makeStyles } from '@material-ui/core';
+import { Typography, 
+    Divider,
+    Button,
+    Snackbar,
+    makeStyles,
+    Box
+} from '@material-ui/core';
+import { Favorite } from '@material-ui/icons';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import UserInfoItem from './UserInfoItem';
 import PostMarkdown from './PostMarkdown';
+import { favoritePost } from 'actions/post';
 
 const useStyles = makeStyles(theme => ({
     post: {
@@ -15,14 +24,34 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function Post(props) {
-    const { post } = props;
+    const { post, author, currentUser, favoritePost } = props;
     const classes = useStyles();
-
+    const [open, setOpen] = React.useState(false);
+    const onClick = () => {
+        if (currentUser) {
+            favoritePost(post);
+        } else {
+            setOpen(true);
+        }
+    }
     return (
         <React.Fragment>
             <div className={classes.post}>
-                <UserInfoItem post={post} />
-
+                <Box display='flex' alignItems='center'>
+                    <div style={{flex: 1}}>
+                        <UserInfoItem post={post} author={author} />
+                    </div>
+                    <Button
+                        color='secondary'
+                        size='small'
+                        variant={post.is_favorited ? 'contained' : 'outlined'}
+                        className={classes.button}
+                        startIcon={<Favorite />}
+                        onClick={onClick}
+                    >
+                        {post.favorites_count}
+                    </Button>
+                </Box>
                 <Link className={classes.markdownLink} to={`/post/${post.id}`}>
                     <Typography variant='h6'>
                         {post.title}
@@ -31,8 +60,24 @@ function Post(props) {
                 </Link>
             </div>
             <Divider />
+
+            <Snackbar
+                open={open}
+                onClose={() => setOpen(false)}
+                message="You need to login to favorite this post"
+                autoHideDuration={4000}
+                action={
+                    <Button color="secondary" size="small" component={Link} to='/login'>
+                        Log In
+                    </Button>
+                }
+            />
         </React.Fragment>
     )
 }
 
-export default Post;
+const mapStateToProps = ({ auth: { data } }) => ({
+    currentUser: data.currentUser
+})
+
+export default connect(mapStateToProps, { favoritePost })(Post);

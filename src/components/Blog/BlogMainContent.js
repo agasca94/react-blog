@@ -11,7 +11,11 @@ function BlogMainContent(props) {
             </Typography>
             <Divider/>
             {posts.map(post => 
-                <PostPreview key={post.id} post={post} author={post.author} />
+                <PostPreview 
+                    key={post.id}
+                    post={post}
+                    author={post.author} 
+                />
             )}
         </React.Fragment>
     );

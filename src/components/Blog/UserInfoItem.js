@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function UserInfoItem(props) {
-    const { post, theme } = props;
+    const { post, author, theme } = props;
     const date = new Date(post.created_at);
     const classes = useStyles();
     const lightTheme = theme === 'light';
@@ -37,7 +37,7 @@ function UserInfoItem(props) {
     return (
         <ListItem disableGutters className={classes.itemRoot}>
             <ListItemAvatar>
-                <Avatar alt={post.author.username} src="https://static.productionready.io/images/smiley-cyrus.jpg" />
+                <Avatar alt={author.username} src="https://static.productionready.io/images/smiley-cyrus.jpg" />
             </ListItemAvatar>
             <ListItemText 
                 primary={
@@ -45,9 +45,9 @@ function UserInfoItem(props) {
                         <Link 
                             className={lightTheme ? classes.primaryText : classes.whiteText} 
                             component={ReactLink} 
-                            to={`/@${post.author.username}`}
+                            to={`/@${author.username}`}
                         >
-                            {post.author.username}
+                            {author.username}
                         </Link>
                     </Typography>
                 }

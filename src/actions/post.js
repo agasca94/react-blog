@@ -18,13 +18,27 @@ export const fetchPost = postId =>
         post
     )
 
-export const savePost = (post, postId) => 
+export const savePost = (p, postId) => 
     callApi(
         [types.SAVE_POST_REQUEST, types.SAVE_POST_SUCCESS, types.SAVE_POST_ERROR],
         () => postId ? 
-            api.updatePost(postId, post) : 
-            api.createPost(post),
+            api.updatePost(postId, p) : 
+            api.createPost(p),
         post
+    )
+
+export const deletePost = postId => 
+    callApi(
+        [types.DELETE_POST_REQUEST, types.DELETE_POST_SUCCESS, types.DELETE_POST_ERROR],
+        () => api.deletePost(postId)
+    )
+
+export const favoritePost = post => 
+    callApi(
+        [types.FAVORITE_POST_REQUEST, types.FAVORITE_POST_SUCCESS, types.FAVORITE_POST_ERROR],
+        () => post.is_favorited ? 
+            api.unfavoritePost(post.id) : 
+            api.favoritePost(post.id)
     )
 
 export const fetchComments = postId => 

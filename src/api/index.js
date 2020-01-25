@@ -19,6 +19,15 @@ export default {
     updatePost: (postId, post) => 
         client.put(`posts/${postId}`, post),
 
+    favoritePost: postId => 
+        client.post(`posts/${postId}/favorite`),
+
+    unfavoritePost: postId => 
+        client.delete(`posts/${postId}/favorite`),
+
+    deletePost: postId => 
+        client.delete(`posts/${postId}`),
+
     fetchComments: (postId) => 
         client.get(`posts/${postId}/comments`),
 
@@ -38,5 +47,8 @@ export default {
         client.put('/me', user),
 
     fetchUser: username => 
-        client.get(`/@${username}`)
+        client.get(`/@${username}`),
+
+    fetchUserPosts: username => 
+        client.get(`/@username/posts`)
 }
