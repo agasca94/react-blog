@@ -4,8 +4,8 @@ import { combineReducers } from 'redux';
 
 const stateReducer = createStateReducer([
     [types.AUTH_REQUEST],
+    [types.SIGN_IN_SUCCESS, types.GET_ME_SUCCESS],
     [types.AUTH_ERROR],
-    [types.SIGN_IN_SUCCESS, types.GET_ME_SUCCESS]
 ])
 
 const dataReducer = (state={}, action) => {

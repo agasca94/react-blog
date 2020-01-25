@@ -1,15 +1,15 @@
 import { combineReducers } from 'redux';
 import auth from './auth';
-import blog from './blog';
-import post from './post';
-import user from './user';
+import posts from './posts';
+import users from './users';
+import comments from './comments';
 import settings from './settings';
 
 const rootReducer = combineReducers({
     auth,
-    blog,
-    post,
-    user,
+    posts,
+    users,
+    comments,
     settings
 })
 

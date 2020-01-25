@@ -3,15 +3,23 @@ import createStateReducer from './state';
 import { combineReducers } from 'redux';
 
 const stateReducer = createStateReducer([
-    [types.FETCH_POSTS_REQUEST],
-    [types.FETCH_POSTS_SUCCESS],
-    [types.FETCH_POSTS_ERROR]
+    [types.FETCH_POSTS_REQUEST, types.FETCH_POST_REQUEST, types.SAVE_POST_REQUEST],
+    [types.FETCH_POSTS_SUCCESS, types.FETCH_POST_SUCCESS, types.SAVE_POST_SUCCESS],
+    [types.FETCH_POSTS_ERROR, types.FETCH_POST_ERROR, types.SAVE_POST_ERROR],
 ]);
 
-const usersReducers = (state={}, { type, payload }) => {
-    switch(type){
-    case types.FETCH_POSTS_SUCCESS:
-        return payload.entities.users;
+const currentPostId = (state=null, { type, payload }) => {
+    switch(type) {
+    case types.DELETE_POST_SUCCESS:
+    case types.FETCH_POST_REQUEST:
+    case types.FETCH_POST_ERROR:
+    case types.UNLOAD_POST:
+        return  null;
+
+    case types.FETCH_POST_SUCCESS:
+    case types.SAVE_POST_SUCCESS:
+        return payload.result;
+
     default:
         return state;
     }
@@ -22,11 +30,17 @@ const postsById = (state={}, { type, payload }) => {
     case types.FETCH_POSTS_SUCCESS:
         return payload.entities.posts;
 
+    case types.FETCH_POST_SUCCESS:
+    case types.SAVE_POST_SUCCESS:
+        return {
+            ...state,
+            [payload.result]: payload.entities.posts[payload.result]
+        }
+
     case types.FAVORITE_POST_SUCCESS:
         const post = state[payload.id]
-        if (!post)  {
-            return state;
-        }
+        if (!post)  return state;
+
         return {
             ...state,
             [post.id]: {
@@ -58,14 +72,10 @@ const allPosts = (state=[], { type, payload }) => {
     }
 }
 
-const postsReducer = combineReducers({
-    byId: postsById,
-    allIds: allPosts
-})
-
 const dataReducer = combineReducers({
-    users: usersReducers,
-    posts: postsReducer
+    currentPostId,
+    byId: postsById,
+    allIds: allPosts,
 })
 
 export default combineReducers({

@@ -3,9 +3,9 @@ import createStateReducer from './state';
 import { combineReducers } from 'redux';
 
 const stateReducer = createStateReducer([
-    [types.SAVE_POST_REQUEST, types.FETCH_POST_REQUEST],
-    [types.SAVE_POST_SUCCESS, types.FETCH_POST_SUCCESS],
-    [types.SAVE_POST_ERROR, types.FETCH_POST_ERROR]
+    [types.FETCH_COMMENTS_REQUEST, types.SAVE_COMMENT_REQUEST, types.DELETE_COMMENT_REQUEST],
+    [types.FETCH_COMMENTS_SUCCESS, types.SAVE_COMMENT_SUCCESS, types.DELETE_COMMENT_SUCCESS],
+    [types.FETCH_COMMENTS_ERROR, types.SAVE_COMMENT_ERROR, types.DELETE_COMMENT_ERROR]
 ]);
 
 const commentsById = (state={}, { type, payload }) => {
@@ -25,7 +25,9 @@ const commentsById = (state={}, { type, payload }) => {
         const { [payload.deleted]: _, ...rest } = state;
         return rest;
     
+    case types.FETCH_COMMENTS_REQUEST:
     case types.DELETE_POST_SUCCESS:
+    case types.UNLOAD_POST:
         return {}
 
     default:
@@ -44,7 +46,9 @@ const allComments = (state=[], { type, payload }) => {
     case types.DELETE_COMMENT_SUCCESS:
         return state.filter(id => id !== payload.deleted);
 
+    case types.FETCH_COMMENTS_REQUEST:
     case types.DELETE_POST_SUCCESS:
+    case types.UNLOAD_POST:
         return [];
     
     default:
@@ -52,57 +56,9 @@ const allComments = (state=[], { type, payload }) => {
     }
 }
 
-const commentsReducer = combineReducers({
+const dataReducer = combineReducers({
     byId: commentsById,
     allIds: allComments
-})
-
-const usersReducer = (state={}, { type, payload }) => {
-    switch(type) {
-
-    case types.FETCH_POST_SUCCESS:
-    case types.SAVE_POST_SUCCESS:
-    case types.FETCH_COMMENTS_SUCCESS:
-    case types.SAVE_COMMENT_SUCCESS:
-        return {
-            ...state,
-            ...payload.entities.users
-        }
-    
-    default:
-        return state;
-    }
-}
-
-const postReducer = (state=null, { type, payload }) => {
-
-    switch(type) {
-
-    case types.DELETE_POST_SUCCESS:
-    case types.FETCH_POST_REQUEST:
-    case types.FETCH_POST_ERROR:
-        return  null;
-
-    case types.FETCH_POST_SUCCESS:
-    case types.SAVE_POST_SUCCESS:
-        return payload.entities.post[payload.result];
-
-    case types.FAVORITE_POST_SUCCESS:
-        return {
-            ...state,
-            is_favorited: payload.is_favorited,
-            favorites_count: payload.favorites_count
-        }
-
-    default:
-        return state;
-    }
-}
-
-const dataReducer = combineReducers({
-    currentPost: postReducer,
-    users: usersReducer,
-    comments: commentsReducer
 })
 
 export default combineReducers({
