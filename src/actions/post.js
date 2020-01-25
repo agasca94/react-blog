@@ -4,7 +4,7 @@ import * as types from './types';
 import { schema } from 'normalizr';
 
 const user = new schema.Entity('users');
-const post = new schema.Entity('post', {
+const post = new schema.Entity('posts', {
     author: user
 });
 const comment = new schema.Entity('comments', {
@@ -66,3 +66,6 @@ export const deleteComment = (postId, commentId) =>
         [types.DELETE_COMMENT_REQUEST, types.DELETE_COMMENT_SUCCESS, types.DELETE_COMMENT_ERROR],
         () => api.deleteComment(postId, commentId)
     )
+
+export const unloadPost = () => 
+    ({ type: types.UNLOAD_POST })
