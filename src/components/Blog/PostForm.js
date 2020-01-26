@@ -34,7 +34,6 @@ function PostForm(props) {
                 required
                 multiline
                 rows='3'
-                autoFocus
                 error={errors?.hasOwnProperty('description')}
                 helperText={errors?.description}
             />

@@ -29,7 +29,7 @@ const Editor = (props) => {
 
     React.useEffect(() => {
         if (postId && post && user) {
-            if (post.author.id !== user.id) {
+            if (post.author !== user.id) {
                 history.replace('/blog')
             }
         }
@@ -55,9 +55,9 @@ const Editor = (props) => {
     );
 }
 
-const mapStateToProps = ({ post, auth }) => ({
-    post: post.data.currentPost,
-    error: post.state.error,
+const mapStateToProps = ({ posts, auth }) => ({
+    post: posts.data.byId[posts.data.currentPostId],
+    error: posts.state.error,
     user: auth.data.currentUser
 })
 

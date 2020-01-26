@@ -16,7 +16,7 @@ import CommentCard from './CommentCard';
 import CommentForm from './CommentForm';
 import UserInfoItem from './UserInfoItem';
 import PostMarkdown from './PostMarkdown';
-import { fetchPost, fetchComments, saveComment, deletePost, deleteComment, favoritePost } from 'actions/post';
+import { fetchPost, fetchComments, saveComment, deletePost, deleteComment, favoritePost, unloadPost } from 'actions/post';
 
 const useStyles = makeStyles(theme => ({
     banner: {
@@ -59,12 +59,14 @@ function Post(props) {
     const classes = useStyles();
     const { postId } = useParams();
     const history = useHistory();
-    const { post, author, currentUser, token, comments, fetchPost, fetchComments, saveComment, deletePost, deleteComment, favoritePost } = props;
+    const { post, author, currentUser, token, comments, fetchPost, fetchComments, saveComment, deletePost, deleteComment, favoritePost, unloadPost } = props;
 
     React.useEffect(() => {
         fetchPost(postId)
         fetchComments(postId)
-    }, [fetchPost, fetchComments, postId])
+
+        return () => unloadPost()
+    }, [fetchPost, fetchComments, postId, unloadPost])
 
     if (!post) {
         return <Loader />
@@ -151,24 +153,27 @@ function Post(props) {
     );
 }
 
-const mapStateToProps = ({ post, auth }) => {
+const mapStateToProps = ({ auth, posts, comments, users }) => {
     const { currentUser, token } = auth.data;
-    const { currentPost, users, comments } = post.data;
-    const author = users[currentPost?.author];
+    const { currentPostId, byId: postsById } = posts.data;
+    const { allIds: commentsIds, byId: commentsById } = comments.data;
+    const { byId: usersById } = users.data;
 
-    const { allIds: commentsIds, byId: commentsById } = comments;
+    const currentPost = postsById[currentPostId];
+    const author = usersById[currentPost?.author];
+
     const commentsArray = commentsIds.map(commentId => ({
         ...commentsById[commentId],
-        author: users[commentsById[commentId].author]
+        author: usersById[commentsById[commentId].author]
     }))
 
     return {
         post: currentPost,
-        author,
         comments: commentsArray,
+        author,
         currentUser,
         token
     }   
 }
 
-export default connect(mapStateToProps, { fetchPost, fetchComments, saveComment, deletePost, deleteComment, favoritePost })(Post);
+export default connect(mapStateToProps, { fetchPost, fetchComments, saveComment, deletePost, deleteComment, favoritePost, unloadPost })(Post);
