@@ -7,8 +7,10 @@ export default {
     register: (name, username, email, password) => 
         client.post('register', { name, username, email, password }),
 
-    fetchPosts: () =>
-        client.get('posts'),
+    fetchPosts: (page=1) =>
+        client.get('posts', {
+            params: { page }
+        }),
 
     fetchPost: postId => 
         client.get(`posts/${postId}`),
@@ -50,5 +52,8 @@ export default {
         client.get(`/@${username}`),
 
     fetchUserPosts: username => 
-        client.get(`/@username/posts`)
+        client.get(`/@${username}/posts`),
+
+    fetchUserFavorites: username => 
+        client.get(`/@${username}/favorites`)
 }
