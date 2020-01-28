@@ -1,4 +1,5 @@
 import React from 'react';
+import debounce from 'lodash.debounce';
 import { CssBaseline, Container, Grid, makeStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 import Sidebar from 'components/Sidebar';
@@ -25,11 +26,31 @@ const useStyles = makeStyles(theme => ({
 
 function Blog(props) {
     const classes = useStyles();
-    const { fetchPosts, posts } = props;
+    const { fetchPosts, posts, loading, currentPage, totalPages } = props;
 
     React.useEffect(() => {
-        fetchPosts()
-    }, [fetchPosts])
+        if (currentPage === 1)
+            fetchPosts()
+    }, [fetchPosts, currentPage]);
+    
+    const handleScroll = React.useCallback(() => {
+        if (loading || currentPage === totalPages) return;
+
+        if (
+            window.innerHeight + document.documentElement.scrollTop
+            !== document.getElementById('root').offsetHeight
+        ) return;
+        
+        fetchPosts(currentPage + 1);
+    }, [loading, currentPage, fetchPosts, totalPages]);
+
+    React.useEffect(() => {
+        const debouncedHandlder = debounce(handleScroll, 100);
+        window.addEventListener('scroll', debouncedHandlder);
+        return () => {
+            window.removeEventListener('scroll', debouncedHandlder);
+        }
+    }, [handleScroll]);
 
     return (
         <React.Fragment>
@@ -62,12 +83,16 @@ const mapStateToProps = ({ users, posts }) => {
     // Not quite performant, may update later
     const { byId: usersById } = users.data;
     const { byId: postsById, allIds: postsIds } = posts.data;
+    const { loading, currentPage, totalPages } = posts.state;
     
     return {
         posts: postsIds?.map(postId => ({
             ...postsById[postId],
             author: usersById[postsById[postId].author]
-        }))
+        })),
+        loading,
+        currentPage,
+        totalPages
     }
 }
 

@@ -8,9 +8,9 @@ const post = new schema.Entity('posts', {
     author: user
 })
 
-export const fetchPosts = () => 
+export const fetchPosts = (page=1) => 
     callApi(
         [types.FETCH_POSTS_REQUEST, types.FETCH_POSTS_SUCCESS, types.FETCH_POSTS_ERROR],
-        api.fetchPosts,
+        () => api.fetchPosts(page),
         [post]
     )

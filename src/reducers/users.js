@@ -22,13 +22,18 @@ const currentUserId = (state=null, { type, payload }) => {
 const usersById = (state={}, { type, payload }) => {
     switch(type) {
     case types.FETCH_POSTS_SUCCESS:
-        return payload.entities.users;
+        return {
+            ...state,
+            ...payload.entities.users
+        }
 
     case types.FETCH_POST_SUCCESS:
     case types.FETCH_COMMENTS_SUCCESS:
     case types.FETCH_USER_SUCCESS:
     case types.SAVE_COMMENT_SUCCESS:
     case types.SAVE_POST_SUCCESS:
+    case types.FETCH_FAVORITES_SUCCESS:
+    case types.FETCH_USER_POSTS_SUCCESS:
         return {
             ...state,
             ...payload.entities.users

@@ -6,7 +6,7 @@ const stateReducer = createStateReducer([
     [types.FETCH_POSTS_REQUEST, types.FETCH_POST_REQUEST, types.SAVE_POST_REQUEST],
     [types.FETCH_POSTS_SUCCESS, types.FETCH_POST_SUCCESS, types.SAVE_POST_SUCCESS],
     [types.FETCH_POSTS_ERROR, types.FETCH_POST_ERROR, types.SAVE_POST_ERROR],
-]);
+], { currentPage:1 });
 
 const currentPostId = (state=null, { type, payload }) => {
     switch(type) {
@@ -28,13 +28,18 @@ const currentPostId = (state=null, { type, payload }) => {
 const postsById = (state={}, { type, payload }) => {
     switch(type){
     case types.FETCH_POSTS_SUCCESS:
-        return payload.entities.posts;
+        return {
+            ...state,
+            ...payload.entities.posts
+        }
 
+    case types.FETCH_FAVORITES_SUCCESS:
+    case types.FETCH_USER_POSTS_SUCCESS:
     case types.FETCH_POST_SUCCESS:
     case types.SAVE_POST_SUCCESS:
         return {
             ...state,
-            [payload.result]: payload.entities.posts[payload.result]
+            ...payload.entities.posts
         }
 
     case types.FAVORITE_POST_SUCCESS:
@@ -62,7 +67,7 @@ const postsById = (state={}, { type, payload }) => {
 const allPosts = (state=[], { type, payload }) => {
     switch(type){
     case types.FETCH_POSTS_SUCCESS:
-        return payload.result;
+        return state.concat(payload.result);
 
     case types.DELETE_POST_SUCCESS:
         return state.filter(postId => payload.deleted !== postId)

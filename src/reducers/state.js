@@ -7,12 +7,14 @@ export default (types, initialState={}) => {
 
         if (requestTypes.includes(type)) {
             return {
+                ...state,
                 loading: true,
                 error: null
             }
         }
         else if (successTypes.includes(type)) {
             return {
+                ...state,
                 loading: false,
                 error: null,
 
@@ -22,6 +24,7 @@ export default (types, initialState={}) => {
         }
         else if(errorTypes.includes(type)) {
             return {
+                ...state,
                 loading: false,
                 error
             }
