@@ -1,10 +1,17 @@
 import React from 'react';
 import debounce from 'lodash.debounce';
-import { CssBaseline, Container, Grid, makeStyles } from '@material-ui/core';
+import { 
+    CssBaseline, 
+    Container, 
+    Grid, 
+    Typography,
+    Divider,
+    makeStyles 
+} from '@material-ui/core';
 import { connect } from 'react-redux';
 import Sidebar from 'components/Sidebar';
-import BlogMainContent from './BlogMainContent';
 import { fetchPosts } from 'actions/blog';
+import PostListContainer from './PostListContainer';
 
 const sidebar = {
     title: 'About',
@@ -26,10 +33,15 @@ const useStyles = makeStyles(theme => ({
 
 function Blog(props) {
     const classes = useStyles();
-    const { fetchPosts, posts, loading, currentPage, totalPages } = props;
+    const { 
+        fetchPosts,
+        loading, 
+        currentPage, 
+        totalPages 
+    } = props;
 
     React.useEffect(() => {
-        if (currentPage === 1)
+        if (!currentPage)
             fetchPosts()
     }, [fetchPosts, currentPage]);
     
@@ -59,10 +71,11 @@ function Blog(props) {
                 <main>
                     <Grid container spacing={5} className={classes.mainGrid}>
                         <Grid item xs={12} md={8}>
-                            <BlogMainContent
-                                posts={posts || []}
-                                title='Recently published'
-                            />
+                            <Typography variant="h6" gutterBottom>
+                                Last published 
+                            </Typography>
+                            <Divider/>
+                            <PostListContainer source='allIds'/>
                         </Grid>
                         
                         <Grid item xs={12} md={4}>
@@ -79,17 +92,10 @@ function Blog(props) {
     )
 }
 
-const mapStateToProps = ({ users, posts }) => {
-    // Not quite performant, may update later
-    const { byId: usersById } = users.data;
-    const { byId: postsById, allIds: postsIds } = posts.data;
-    const { loading, currentPage, totalPages } = posts.state;
+const mapStateToProps = ({ posts: { state } }) => {
+    const { loading, currentPage, totalPages } = state.posts;
     
     return {
-        posts: postsIds?.map(postId => ({
-            ...postsById[postId],
-            author: usersById[postsById[postId].author]
-        })),
         loading,
         currentPage,
         totalPages

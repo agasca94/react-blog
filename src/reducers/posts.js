@@ -2,11 +2,21 @@ import * as types from 'actions/types';
 import createStateReducer from './state';
 import { combineReducers } from 'redux';
 
-const stateReducer = createStateReducer([
-    [types.FETCH_POSTS_REQUEST, types.FETCH_POST_REQUEST, types.SAVE_POST_REQUEST],
-    [types.FETCH_POSTS_SUCCESS, types.FETCH_POST_SUCCESS, types.SAVE_POST_SUCCESS],
-    [types.FETCH_POSTS_ERROR, types.FETCH_POST_ERROR, types.SAVE_POST_ERROR],
-], { currentPage:1 });
+// We'll use two different state reducers here so they don't overwrite each other:
+
+// - One for fetching and saving a singe post
+const postSateReducer = createStateReducer([
+    [types.FETCH_POST_REQUEST, types.SAVE_POST_REQUEST],
+    [types.FETCH_POST_SUCCESS, types.SAVE_POST_SUCCESS],
+    [types.FETCH_POST_ERROR, types.SAVE_POST_ERROR],
+])
+
+// - Another for fetching the paginated list of posts
+const postsStateReducer = createStateReducer([
+    [types.FETCH_POSTS_REQUEST],
+    [types.FETCH_POSTS_SUCCESS],
+    [types.FETCH_POSTS_ERROR],
+]);
 
 const currentPostId = (state=null, { type, payload }) => {
     switch(type) {
@@ -81,6 +91,11 @@ const dataReducer = combineReducers({
     currentPostId,
     byId: postsById,
     allIds: allPosts,
+})
+
+const stateReducer = combineReducers({
+    post: postSateReducer,
+    posts: postsStateReducer
 })
 
 export default combineReducers({

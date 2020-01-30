@@ -7,11 +7,9 @@ import { Typography,
     Box
 } from '@material-ui/core';
 import { Favorite } from '@material-ui/icons';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import UserInfoItem from './UserInfoItem';
 import PostMarkdown from './PostMarkdown';
-import { favoritePost } from 'actions/post';
 
 const useStyles = makeStyles(theme => ({
     post: {
@@ -27,6 +25,7 @@ function Post(props) {
     const { post, author, currentUser, favoritePost } = props;
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    
     const onClick = () => {
         if (currentUser) {
             favoritePost(post);
@@ -76,8 +75,4 @@ function Post(props) {
     )
 }
 
-const mapStateToProps = ({ auth: { data } }) => ({
-    currentUser: data.currentUser
-})
-
-export default connect(mapStateToProps, { favoritePost })(Post);
+export default Post;
