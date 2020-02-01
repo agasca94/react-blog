@@ -8,15 +8,28 @@ import {
     Button,
     makeStyles,
 } from '@material-ui/core';
-import { Edit, Delete, Favorite } from '@material-ui/icons';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { 
+    Edit,
+    Delete,
+    Favorite 
+} from '@material-ui/icons';
+import { 
+    Link, 
+    useParams, 
+    useHistory 
+} from 'react-router-dom';
 import { connect } from 'react-redux';
 import Loader from 'components/Loader';
-import CommentCard from './CommentCard';
-import CommentForm from './CommentForm';
+import CommentListContainer from './CommentListContainer';
 import UserInfoItem from './UserInfoItem';
 import PostMarkdown from './PostMarkdown';
-import { fetchPost, fetchComments, saveComment, deletePost, deleteComment, favoritePost, unloadPost } from 'actions/post';
+import { 
+    fetchPost, 
+    fetchComments, 
+    deletePost,  
+    favoritePost, 
+    unloadPost 
+} from 'actions/post';
 
 const useStyles = makeStyles(theme => ({
     banner: {
@@ -57,9 +70,19 @@ const useStyles = makeStyles(theme => ({
 
 function Post(props) {
     const classes = useStyles();
-    const { postId } = useParams();
     const history = useHistory();
-    const { post, author, currentUser, token, comments, fetchPost, fetchComments, saveComment, deletePost, deleteComment, favoritePost, unloadPost } = props;
+    const { postId } = useParams();
+    const { 
+        post, 
+        author, 
+        currentUser,
+        fetchPost,
+        fetchComments,
+        unloadPost,
+
+        deletePost, 
+        favoritePost, 
+    } = props;
 
     React.useEffect(() => {
         fetchPost(postId)
@@ -68,16 +91,13 @@ function Post(props) {
         return () => unloadPost()
     }, [fetchPost, fetchComments, postId, unloadPost])
 
-    if (!post) {
-        return <Loader />
-    }
-
-    const del = () => 
+    const onDelete = () => 
         deletePost(postId)
-            .then(res => !res.error && history.replace('/blog'))
+            .then(res => 
+                !res.error && history.replace('/blog')
+            )
 
-    const onSaveComment = (contents, commentId) => 
-        saveComment(postId, { contents }, commentId);
+    if (!post) return <Loader />
 
     return (
         <React.Fragment>
@@ -87,8 +107,10 @@ function Post(props) {
                     <Typography variant='h4' className={classes.username}>
                         { post.title }
                     </Typography>
+
                     <Box display='flex'>
                         <UserInfoItem theme='dark' author={author} post={post}/>
+
                         {author.id === currentUser?.id &&
                             <Box alignItems='center' display='flex'>
                                 <Button
@@ -102,7 +124,7 @@ function Post(props) {
                                     Edit
                                 </Button>
                                 <Button
-                                    onClick={del}
+                                    onClick={onDelete}
                                     size='small'
                                     variant='outlined'
                                     className={classes.deleteButton}
@@ -112,6 +134,7 @@ function Post(props) {
                                 </Button>
                             </Box>
                         }
+
                         {author.id !== currentUser?.id && currentUser &&
                             <Box alignItems='center' display='flex'>
                                 <Button
@@ -129,51 +152,41 @@ function Post(props) {
                     </Box>
                 </Container>
             </Box>
+
             <Container maxWidth='lg' className={classes.posts}>
                 <PostMarkdown contents={post.contents}/>
                 <Divider />
             </Container>
 
             <Container maxWidth='md' className={classes.commentsContainer}>
-                {token &&
-                    <CommentForm onPost={onSaveComment}/>
-                }
-                {comments.map(comment => 
-                    <CommentCard 
-                        key={comment.id} 
-                        comment={comment} 
-                        author={comment.author}
-                        editable={comment.author.id === currentUser?.id}
-                        onSave={contents => onSaveComment(contents, comment.id)}
-                        onDelete={() => deleteComment(postId, comment.id)}
-                    />
-                )}
+                <CommentListContainer postId={postId} />
             </Container>
         </React.Fragment>
     );
 }
 
-const mapStateToProps = ({ auth, posts, comments, users }) => {
-    const { currentUser, token } = auth.data;
+const mapStateToProps = ({ auth, posts, users }) => {
+    const { currentUser } = auth.data;
     const { currentPostId, byId: postsById } = posts.data;
-    const { allIds: commentsIds, byId: commentsById } = comments.data;
     const { byId: usersById } = users.data;
 
     const currentPost = postsById[currentPostId];
     const author = usersById[currentPost?.author];
 
-    const commentsArray = commentsIds.map(commentId => ({
-        ...commentsById[commentId],
-        author: usersById[commentsById[commentId].author]
-    }))
-
     return {
         post: currentPost,
-        comments: commentsArray,
         author,
         currentUser,
-        token
     }   
 }
 
-export default connect(mapStateToProps, { fetchPost, fetchComments, saveComment, deletePost, deleteComment, favoritePost, unloadPost })(Post);
+export default connect(
+    mapStateToProps, 
+    { 
+        fetchPost, 
+        fetchComments, 
+        deletePost,
+        favoritePost, 
+        unloadPost 
+    }
+)(Post);
