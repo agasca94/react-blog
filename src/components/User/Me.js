@@ -7,16 +7,14 @@ import {
     Container, 
     Button,
     CssBaseline,
-    Tabs,
-    Tab,
     makeStyles
 } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import BlogMainContent from 'components/Blog/BlogMainContent';
 import Loader from 'components/Loader';
 import { fetchUser, fetchFavorites, fetchUserPosts, unloadProfile } from 'actions/user';
 import { signOut } from 'actions/auth';
+import UserPosts from './UserPosts';
 
 const useStyles = makeStyles(theme => ({
     large: {
@@ -53,13 +51,47 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
+function UserActions({ signOut }) {
+    const classes = useStyles();
+
+    return (
+        <Container className={classes.bannerActions}>
+            <Button
+                to='/settings'
+                component={Link}
+                size='small'
+                variant='outlined'
+                className={classes.settingsButton}
+                startIcon={<Settings/>}
+            >
+                Edit
+            </Button>
+            <Button
+                onClick={signOut}
+                size='small'
+                variant='outlined'
+                className={classes.logoutButton}
+                startIcon={<ExitToApp/>}
+            >
+                Logout
+            </Button>
+        </Container>
+    );
+}
+
 function Me(props) {
     const classes = useStyles();
     const { username } = useParams();
-    const { signOut, currentUser, fetchedUser, fetchUser, fetchFavorites, fetchUserPosts, owned, favorites, unloadProfile } = props;
+    const {
+        fetchUser, 
+        fetchFavorites, 
+        fetchUserPosts, 
+        signOut, 
+        unloadProfile,
+        currentUser,
+        fetchedUser
+    } = props;
     const user = username ? fetchedUser : currentUser;
-
-    const [activeTab, setActiveTab] = React.useState(0);
 
     React.useEffect(() => {
         if (username) {
@@ -79,9 +111,11 @@ function Me(props) {
 
     React.useEffect(() => () => unloadProfile(), [unloadProfile]);
 
-    if (!user) {
-        return <Loader/>
-    }
+    if (!user) return <Loader/>
+
+    const userActions = currentUser ? 
+        UserActions({ signOut }) : 
+        null;
 
     return (
         <React.Fragment>
@@ -95,29 +129,7 @@ function Me(props) {
                     <Typography variant='h4' className={classes.username}>
                         {user.username}
                     </Typography>
-                    {!username &&
-                        <Container className={classes.bannerActions}>
-                            <Button
-                                to='/settings'
-                                component={Link}
-                                size='small'
-                                variant='outlined'
-                                className={classes.settingsButton}
-                                startIcon={<Settings/>}
-                            >
-                                Edit
-                            </Button>
-                            <Button
-                                onClick={signOut}
-                                size='small'
-                                variant='outlined'
-                                className={classes.logoutButton}
-                                startIcon={<ExitToApp/>}
-                            >
-                                Logout
-                            </Button>
-                        </Container>
-                    }
+                    {userActions}
                 </Container>
             </Box>
             <Container maxWidth='md' className={classes.posts}>
@@ -125,47 +137,26 @@ function Me(props) {
                     {user.bio}
                 </Typography>
 
-                <Tabs
-                    value={activeTab}
-                    indicatorColor="secondary"
-                    textColor="secondary"
-                    onChange={(_, newValue) => setActiveTab(newValue)}
-                >
-                    <Tab label="My posts" />
-                    <Tab label="Favorites" />
-                </Tabs>
-                {activeTab === 0 &&
-                    <BlogMainContent title='' posts={owned}/>
-                }
-                {activeTab === 1 &&
-                    <BlogMainContent title='' posts={favorites}/>
-                }
+                <UserPosts/>
             </Container>
         </React.Fragment>
     )
 }
 
-const mapStateToProps = ({ auth, users, posts, profile }) => {
-    const postsById = posts.data.byId;
-    const usersById = users.data.byId;
-    const { favoritesIds, ownedIds } = profile.data;
-
-    const favorites = favoritesIds?.map(postId => ({
-        ...postsById[postId],
-        author: usersById[postsById[postId].author]
-    }))
-
-    const owned = ownedIds?.map(postId => ({
-        ...postsById[postId],
-        author: usersById[postsById[postId].author]
-    }))
-
+const mapStateToProps = ({ auth, users }) => {
     return {
         currentUser: auth.data.currentUser,
-        fetchedUser: users.data.byId[users.data.currentUserId],
-        favorites,
-        owned
+        fetchedUser: users.data.byId[users.data.currentUserId]
     }
 }
 
-export default connect(mapStateToProps, { signOut, fetchUser, fetchFavorites, fetchUserPosts, unloadProfile })(Me);
+export default connect(
+    mapStateToProps, 
+    { 
+        signOut, 
+        fetchUser, 
+        fetchFavorites, 
+        fetchUserPosts, 
+        unloadProfile 
+    }
+)(Me);
