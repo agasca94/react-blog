@@ -51,8 +51,7 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-function UserActions({ signOut }) {
-    const classes = useStyles();
+function UserActions({ signOut, classes }) {
 
     return (
         <Container className={classes.bannerActions}>
@@ -111,11 +110,11 @@ function Me(props) {
 
     React.useEffect(() => () => unloadProfile(), [unloadProfile]);
 
-    if (!user) return <Loader/>
-
     const userActions = currentUser ? 
-        UserActions({ signOut }) : 
+        UserActions({ signOut, classes }) : 
         null;
+
+    if (!user) return <Loader/>
 
     return (
         <React.Fragment>
@@ -125,7 +124,7 @@ function Me(props) {
                     <Avatar 
                         align='center'
                         className={classes.large} 
-                        src='https://static.productionready.io/images/smiley-cyrus.jpg'/>
+                        src={user.picture}/>
                     <Typography variant='h4' className={classes.username}>
                         {user.username}
                     </Typography>

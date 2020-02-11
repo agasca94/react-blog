@@ -12,7 +12,7 @@ function CommentListContainer({ comments, postId, currentUser, saveComment }) {
     return (
         <React.Fragment>
             {currentUser &&
-                <CommentForm onPost={onSave}/>
+                <CommentForm currentUser={currentUser} onPost={onSave}/>
             }
 
             {comments.map(id => 

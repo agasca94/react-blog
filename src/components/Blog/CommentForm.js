@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 function CommentForm(props) {
     const classes = useStyles();
-    const { onPost } = props;
+    const { onPost, currentUser } = props;
     const [comment, setComment] = React.useState('');
     const handle = handleChange(setComment);
 
@@ -52,7 +52,7 @@ function CommentForm(props) {
                 </Button>
                 <Avatar 
                     className={classes.avatar} 
-                    src='https://static.productionready.io/images/smiley-cyrus.jpg'/>
+                    src={currentUser.picture}/>
             </div>
         </Paper>
     );

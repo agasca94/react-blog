@@ -37,7 +37,7 @@ function UserInfoItem(props) {
     return (
         <ListItem disableGutters className={classes.itemRoot}>
             <ListItemAvatar>
-                <Avatar alt={author.username} src="https://static.productionready.io/images/smiley-cyrus.jpg" />
+                <Avatar alt={author.username} src={author.picture} />
             </ListItemAvatar>
             <ListItemText 
                 primary={
