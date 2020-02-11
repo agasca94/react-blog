@@ -1,4 +1,5 @@
 import { client } from './client';
+import { createFormData } from '../utils';
 
 export default {
     login: (email, password) => 
@@ -7,9 +8,9 @@ export default {
     register: (name, username, email, password) => 
         client.post('register', { name, username, email, password }),
 
-    fetchPosts: (page=1) =>
+    fetchPosts: (params={page: 1, tag: null}) =>
         client.get('posts', {
-            params: { page }
+            params
         }),
 
     fetchPost: postId => 
@@ -46,7 +47,12 @@ export default {
         client.get('me', { params }),
 
     updateUser: user => 
-        client.put('/me', user),
+        client.put(
+            '/me', 
+            createFormData(user), {
+                headers: {'Content-Type': 'multipart/form-data'}
+            }
+        ),
 
     fetchUser: username => 
         client.get(`/@${username}`),

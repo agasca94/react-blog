@@ -1,3 +1,13 @@
+export const createFormData = body => {
+    const form = new FormData();
+    const entries = Object.entries(body);
+    for (const [key, value] of entries) {
+        form.append(key, value);
+    }
+
+    return form;
+}
+
 export function formatDate(date) {
     var monthNames = [
         "January", "February", "March",

@@ -5,11 +5,13 @@ import {
     Button, 
 } from '@material-ui/core';
 import ResourceForm from 'components/ResourceForm';
+import ImagePicker from '../ImagePicker';
 
 const normalizeUser = user => ({
     name: user?.name || '',
     email: user?.email || '',
-    bio: user?.bio || ''
+    bio: user?.bio || '',
+    picture: user?.picture || ''
 })
 
 const SettingsForm = function(props) {
@@ -17,9 +19,12 @@ const SettingsForm = function(props) {
 
     return (
         <ResourceForm resource={user} normalize={normalizeUser} onSubmit={onSave} style={{width: '100%'}}>
+            <ImagePicker
+                label='name'
+                name='picture'
+            />
             <TextField
                 variant="outlined"
-                margin="normal"
                 fullWidth
                 id="name"
                 label="Name"

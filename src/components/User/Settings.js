@@ -25,6 +25,9 @@ function Settings(props) {
     const { currentUser, loading, saveSettings, error } = props;
 
     const onSave = settings => {
+        if (typeof settings.picture === 'string') {
+            delete settings['picture'];
+        }
         saveSettings(settings)
             .then(r => !r.error && history.push('/me'));
     }
@@ -36,7 +39,11 @@ function Settings(props) {
                     Your Settings
                 </Typography>
                 {currentUser &&
-                    <SettingsForm user={currentUser} onSave={onSave} errors={error?.errors}/>
+                    <SettingsForm 
+                        user={currentUser} 
+                        onSave={onSave}
+                        errors={error?.errors}
+                    />
                 }
                 {(!currentUser || loading) &&
                     <Loader/>
