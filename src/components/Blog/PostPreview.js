@@ -4,6 +4,7 @@ import { Typography,
     Button,
     Snackbar,
     makeStyles,
+    Chip,
     Box
 } from '@material-ui/core';
 import { Favorite } from '@material-ui/icons';
@@ -18,6 +19,9 @@ const useStyles = makeStyles(theme => ({
     markdownLink: {
         textDecoration: 'none',
         color: 'inherit'
+    },
+    tagsContainer: {
+        marginTop: theme.spacing(1)
     }
 }))
 
@@ -57,6 +61,19 @@ function Post(props) {
                     </Typography>
                     <PostMarkdown contents={post.description}/>
                 </Link>
+
+                <div className={classes.tagsContainer}>
+                    {post.tags?.map(tag => (
+                        <Chip
+                            size='small'
+                            style={{marginRight: '8px'}}
+                            key={tag}
+                            variant='outlined'
+                            color="default" 
+                            label={`#${tag}`} 
+                        />
+                    ))}
+                </div>
             </div>
             <Divider />
 

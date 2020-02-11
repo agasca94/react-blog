@@ -5,14 +5,23 @@ import ResourceForm from 'components/ResourceForm';
 const normalizePost = post => ({
     title: post?.title || '',
     description: post?.description || '',
-    contents: post?.contents || ''
+    contents: post?.contents || '',
+    tags: post?.tags?.join(',') || ''
 })
 
 function PostForm(props) {
     const { post, onSave, errors } = props;
 
+    const onSubmit = post => {
+        post.tags = post.tags ? 
+            post.tags.replace(/\s/g, "").split(',') :
+            []
+
+        onSave(post)
+    }
+
     return (
-        <ResourceForm resource={post} normalize={normalizePost} onSubmit={onSave} style={{width: '100%'}}>
+        <ResourceForm resource={post} normalize={normalizePost} onSubmit={onSubmit} style={{width: '100%'}}>
             <TextField
                 variant="outlined"
                 margin="normal"
@@ -23,6 +32,15 @@ function PostForm(props) {
                 autoFocus
                 error={errors?.hasOwnProperty('title')}
                 helperText={errors?.title}
+            />
+            <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                name="tags"
+                label="Tags"
+                error={errors?.hasOwnProperty('tags')}
+                helperText={errors?.tags}
             />
             <TextField
                 variant="outlined"

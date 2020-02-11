@@ -6,6 +6,8 @@ import {
     Typography,
     Divider,
     Button,
+    Chip,
+    Avatar,
     makeStyles,
 } from '@material-ui/core';
 import { 
@@ -49,7 +51,7 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.common.white
     },
     posts: {
-        marginTop: theme.spacing(2)
+        marginTop: theme.spacing(2),
     },
     editButton: {
         margin: theme.spacing(0, 3),
@@ -66,6 +68,10 @@ const useStyles = makeStyles(theme => ({
     commentsContainer: {
         marginTop: theme.spacing(4)
     },
+    tagsContainer: {
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2)
+    }
 }))
 
 function Post(props) {
@@ -155,9 +161,21 @@ function Post(props) {
 
             <Container maxWidth='lg' className={classes.posts}>
                 <PostMarkdown contents={post.contents}/>
+                <div className={classes.tagsContainer}>
+                    {post.tags?.map(tag => (
+                        <Chip
+                            style={{marginRight: '8px'}}
+                            key={tag}
+                            variant='outlined'
+                            color="secondary" 
+                            label={`#${tag}`}
+                            avatar={<Avatar>{tag[0]}</Avatar>} 
+                        />
+                    ))}
+                </div>
                 <Divider />
             </Container>
-
+            
             <Container maxWidth='md' className={classes.commentsContainer}>
                 <CommentListContainer postId={postId} />
             </Container>
