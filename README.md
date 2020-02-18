@@ -6,7 +6,7 @@ YABA is just another blogging app made for trying new technologies. It's rather 
 
 ----
 ## Stack
-This frontend made using the Javascript framework React.
+This frontend was made using the Javascript framework React in conjunction with the global state managment library Redux.
 
 ----
 ## Installation and usage
@@ -25,6 +25,7 @@ This frontend made using the Javascript framework React.
 ## Libraries used
 * React
 * Redux
+* react-redux
 * Material-UI
 * Axios
 * normalizr
