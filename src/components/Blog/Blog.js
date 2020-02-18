@@ -15,7 +15,7 @@ import PostListContainer from './PostListContainer';
 
 const sidebar = {
     title: 'About',
-    description: 'Just another blog app made with React and a Python backend',
+    description: 'Just another blogging app made with React and a Python backend',
     archives: [
         { title: 'August 2019', url:'#'},
         { title: 'September 2019', url:'#'},
